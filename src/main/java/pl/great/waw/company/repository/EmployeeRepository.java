@@ -26,4 +26,23 @@ public class EmployeeRepository {
         }
         throw new PeselAlreadyExistException("This pesel not found: " + pesel);
     }
+
+    public Employee update(String pesel, Employee employee) throws PeselAlreadyExistException {
+        Employee oldEmployee = this.read(pesel);
+        int index = list.indexOf(oldEmployee);
+        list.set(index, employee);
+        return employee;
+    }
+
+    public boolean delete(String pesel) throws PeselAlreadyExistException {
+        return list.remove(this.read(pesel));
+    }
+
+    public int size(){
+        return list.size();
+    }
+
+
+
+
 }
