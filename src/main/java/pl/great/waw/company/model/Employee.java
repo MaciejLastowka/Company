@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 public class Employee {
 
 
-    private final long pesel;
+    private final String pesel;
     private final String firstName;
     private final String lastName;
     private final BigDecimal price;
@@ -14,7 +14,7 @@ public class Employee {
     private final LocalDateTime updated;
 
 
-    public Employee(long pesel, String firstName, String lastName, BigDecimal price) {
+    public Employee(String pesel, String firstName, String lastName, BigDecimal price) {
         this.pesel = pesel;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -23,7 +23,7 @@ public class Employee {
         this.updated = LocalDateTime.now();
     }
 
-    public long getPesel() {
+    public String getPesel() {
         return pesel;
     }
 
