@@ -38,11 +38,9 @@ public class EmployeeRepository {
         return list.remove(this.read(pesel));
     }
 
-    public int size(){
+    public int size() {
         return list.size();
     }
-
-
 
 
 }
