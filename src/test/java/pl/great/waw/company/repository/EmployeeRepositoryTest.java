@@ -1,15 +1,20 @@
 package pl.great.waw.company.repository;
 
+import com.github.javafaker.Faker;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.matchers.NotNull;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
 import pl.great.waw.company.model.Employee;
 
 import java.math.BigDecimal;
+import java.util.Locale;
+import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 class EmployeeRepositoryTest {
+
+    private static final int TEST_DATA_COUNT = 100000;
 
     @Test
     void create() throws PeselAlreadyExistException {
@@ -49,5 +54,28 @@ class EmployeeRepositoryTest {
         employeeRepository.create(employee1);
         employeeRepository.delete("29123123");
         assertEquals(1, employeeRepository.size());
+    }
+
+    @Test
+    void random() throws PeselAlreadyExistException {
+
+        Faker faker = new Faker(new Locale("pl"));
+        EmployeeRepository employeeRepository = new EmployeeRepository();
+
+        IntStream.range(0,TEST_DATA_COUNT).forEach((i) -> {
+
+            String pesel = faker.idNumber().invalid();
+            String firstName = faker.name().firstName();
+            String lastName = faker.name().lastName();
+            BigDecimal salary = new BigDecimal(faker.number().randomNumber());
+            Employee employee = new Employee(pesel, firstName, lastName, salary);
+            try {
+                employeeRepository.create(employee);
+            } catch (PeselAlreadyExistException e) {
+                e.printStackTrace();
+            }
+        });
+
+        assertEquals(TEST_DATA_COUNT, employeeRepository.size());
     }
 }
