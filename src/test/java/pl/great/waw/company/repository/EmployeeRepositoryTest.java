@@ -7,11 +7,14 @@ import pl.great.waw.company.model.Employee;
 
 import java.math.BigDecimal;
 import java.util.Locale;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class EmployeeRepositoryTest {
+
+    private static final int TEST_DATA_COUNT = 100000;
 
     @Test
     void create() throws PeselAlreadyExistException {
@@ -55,19 +58,24 @@ class EmployeeRepositoryTest {
 
     @Test
     void random() throws PeselAlreadyExistException {
-        int randomEmployee = 100000;
 
         Faker faker = new Faker(new Locale("pl"));
         EmployeeRepository employeeRepository = new EmployeeRepository();
 
-        for (int i = 0; i < randomEmployee; i++) {
+        IntStream.range(0,TEST_DATA_COUNT).forEach((i) -> {
+
             String pesel = faker.idNumber().invalid();
             String firstName = faker.name().firstName();
             String lastName = faker.name().lastName();
             BigDecimal salary = new BigDecimal(faker.number().randomNumber());
             Employee employee = new Employee(pesel, firstName, lastName, salary);
-            employeeRepository.create(employee);
-        }
-        assertEquals(randomEmployee, employeeRepository.size());
+            try {
+                employeeRepository.create(employee);
+            } catch (PeselAlreadyExistException e) {
+                e.printStackTrace();
+            }
+        });
+
+        assertEquals(TEST_DATA_COUNT, employeeRepository.size());
     }
 }
