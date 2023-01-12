@@ -1,44 +1,42 @@
 package pl.great.waw.company.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
 import pl.great.waw.company.model.Employee;
-
-import pl.great.waw.company.repository.EmployeeRepo;
+import pl.great.waw.company.repository.EmployeeRepository;
 
 import java.math.BigDecimal;
 
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService {
+public class EmployeeServiceImpl {
 
-    EmployeeRepo employeeRepo;
+    EmployeeRepository employeeRepo;
 
-    @Autowired
-    public EmployeeServiceImpl(EmployeeRepo employeeRepo) {
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepo) {
         this.employeeRepo = employeeRepo;
     }
 
-    @Override
+
     public EmployeeDto update(EmployeeDto employeeDto) {
         return null;
     }
 
-    @Override
-    public EmployeeDto get(String pesel) {
-        return empToDto(employeeRepo.get(pesel));
+
+    public EmployeeDto read(String pesel) throws PeselAlreadyExistException {
+        return empToDto(employeeRepo.read(pesel));
     }
 
 
-    @Override
-    public EmployeeDto create(String firstName, String lastName, String pesel, BigDecimal salary) {
-        Employee employee = employeeRepo.create(firstName, lastName, pesel, salary);
+
+    public EmployeeDto create(EmployeeDto employeeDto) throws PeselAlreadyExistException {
+        Employee employee = employeeRepo.create(DtoToEmp(employeeDto));
         return empToDto(employee);
     }
 
 
-    public boolean delete(String pesel) {
+    public boolean delete(String pesel) throws PeselAlreadyExistException {
         return employeeRepo.delete(pesel);
 
     }
@@ -52,7 +50,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeDto;
     }
 
-    public EmployeeDto create(EmployeeDto employeeDto) {
-        return employeeDto;
+    private Employee DtoToEmp(EmployeeDto employeeDto) {
+        Employee employee = new Employee(employeeDto.getPesel(), employeeDto.getFirstName(), employeeDto.getLastName(), employeeDto.getSalary());
+        return employee;
     }
 }

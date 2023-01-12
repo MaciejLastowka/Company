@@ -18,6 +18,7 @@ public class EmployeeRepository {
         return employee;
     }
 
+
     public Employee read(String pesel) throws PeselAlreadyExistException {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getPesel().equals(pesel)) {

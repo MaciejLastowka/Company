@@ -11,7 +11,6 @@ import org.mockito.junit.MockitoRule;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
 import pl.great.waw.company.model.Employee;
-import pl.great.waw.company.repository.EmployeeRepo;
 import pl.great.waw.company.repository.EmployeeRepository;
 
 import java.math.BigDecimal;
@@ -32,7 +31,7 @@ class EmployeeServiceImplTest {
     private static final BigDecimal SALARY_TEST = BigDecimal.TEN;
 
     @Mock
-    EmployeeRepo employeeRepo;
+    EmployeeRepository employeeRepo;
 
     @InjectMocks
     EmployeeServiceImpl employeeService;
@@ -46,14 +45,14 @@ class EmployeeServiceImplTest {
 
     @BeforeEach
     public void setup() throws Exception {
-        this.employeeFromRepo = new Employee(FIRST_NAME_TEST, LAST_NAME_TEST, PESEL_TEST, SALARY_TEST);
-        this.employeeFromController = new EmployeeDto(FIRST_NAME_TEST, LAST_NAME_TEST, PESEL_TEST, SALARY_TEST);
+        this.employeeFromRepo = new Employee(PESEL_TEST, FIRST_NAME_TEST, LAST_NAME_TEST , SALARY_TEST);
+        this.employeeFromController = new EmployeeDto(PESEL_TEST, FIRST_NAME_TEST, LAST_NAME_TEST, SALARY_TEST);
     }
 
     @Test
     void create() throws PeselAlreadyExistException {
         EmployeeServiceImpl employeeServiceImpl = new EmployeeServiceImpl(employeeRepo);
-        when(employeeRepo.create(anyString(), anyString(), anyString(), any(BigDecimal.class))).thenReturn(this.employeeFromRepo);
+        when(employeeRepo.create(any())).thenReturn(this.employeeFromRepo);
         EmployeeDto employeefromService = employeeServiceImpl.create(employeeFromController);
         assertEquals(PESEL_TEST, employeefromService.getPesel());
 //        assertEquals(employeefromService, employeeServiceImpl.create("22222222", "bartek", "porebski", BigDecimal.TEN));
@@ -62,8 +61,8 @@ class EmployeeServiceImplTest {
     @Test
     void read() throws PeselAlreadyExistException {
         EmployeeServiceImpl employeeServiceImpl = mock(EmployeeServiceImpl.class);
-        Employee employee = new Employee("29123123", "bartek", "porebski", BigDecimal.TEN);
-        employeeServiceImpl.create("29123123", "bartek", "porebski", BigDecimal.TEN);
+        EmployeeDto employeeDto = new EmployeeDto("29123123", "bartek", "porebski", BigDecimal.TEN);
+        employeeServiceImpl.create(employeeDto);
 //            assertEquals(employee,employee1);
     }
 
