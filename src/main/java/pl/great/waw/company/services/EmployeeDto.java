@@ -1,6 +1,7 @@
 package pl.great.waw.company.services;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class EmployeeDto {
     private String pesel;
@@ -12,6 +13,7 @@ public class EmployeeDto {
     public EmployeeDto() {
 
     }
+
 
     public EmployeeDto(String pesel, String firstName, String lastName, BigDecimal salary) {
         this.pesel = pesel;
@@ -51,4 +53,18 @@ public class EmployeeDto {
     public void setSalary(BigDecimal salary) {
         this.price = salary;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EmployeeDto that = (EmployeeDto) o;
+        return Objects.equals(pesel, that.pesel) && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pesel, firstName, lastName, price);
+    }
+
 }

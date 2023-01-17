@@ -19,15 +19,16 @@ public class EmployeeServiceImpl {
     }
 
 
-    public EmployeeDto update(EmployeeDto employeeDto) {
-        return null;
-    }
+    public EmployeeDto update(String pesel, EmployeeDto employeeDto) throws PeselAlreadyExistException {
+        Employee employee = DtoToEmp(employeeDto);
+        Employee update = employeeRepo.update(pesel, employee);
+        return empToDto(update);
 
+    }
 
     public EmployeeDto read(String pesel) throws PeselAlreadyExistException {
         return empToDto(employeeRepo.read(pesel));
     }
-
 
 
     public EmployeeDto create(EmployeeDto employeeDto) throws PeselAlreadyExistException {
