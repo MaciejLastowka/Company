@@ -33,6 +33,9 @@ public class EmployeeServiceImpl {
     public boolean delete(String pesel) throws PeselAlreadyExistException {
         return employeeRepo.delete(pesel);
     }
+    public boolean isPeselAlreadyExist(String pesel) {
+        return employeeRepo.isPeselAlreadyExist(pesel);
+    }
 
     private EmployeeDto empToDto(Employee employee) {
         EmployeeDto employeeDto = new EmployeeDto();
