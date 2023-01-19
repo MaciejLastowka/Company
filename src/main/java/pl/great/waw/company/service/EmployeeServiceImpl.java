@@ -1,9 +1,10 @@
-package pl.great.waw.company.services;
+package pl.great.waw.company.service;
 
 import org.springframework.stereotype.Service;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
 import pl.great.waw.company.model.Employee;
 import pl.great.waw.company.repository.EmployeeRepository;
+import pl.great.waw.company.service.EmployeeDto;
 
 
 @Service

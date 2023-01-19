@@ -9,6 +9,7 @@ import pl.great.waw.company.service.EmployeeServiceImpl;
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
+
     private final EmployeeRepository employeeRepository = new EmployeeRepository();
     private final EmployeeServiceImpl employeeService = new EmployeeServiceImpl(employeeRepository);
 
@@ -20,11 +21,6 @@ public class EmployeeController {
     @GetMapping(value = "/isPeselAlreadyExist/{pesel}")
     public boolean isPeselAlreadyExist(@PathVariable String pesel) throws PeselAlreadyExistException {
         return employeeService.isPeselAlreadyExist(pesel);
-    }
-
-    @GetMapping(value = "/size")
-    public int size() throws PeselAlreadyExistException {
-        return employeeService.size();
     }
 
     @PostMapping
