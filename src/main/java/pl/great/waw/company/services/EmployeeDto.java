@@ -67,4 +67,13 @@ public class EmployeeDto {
         return Objects.hash(pesel, firstName, lastName, price);
     }
 
+    @Override
+    public String toString() {
+        return "EmployeeDto{" +
+                "pesel='" + pesel + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", price=" + price +
+                '}';
+    }
 }

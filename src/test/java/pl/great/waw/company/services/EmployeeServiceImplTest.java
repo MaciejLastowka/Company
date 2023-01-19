@@ -18,12 +18,10 @@ import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class EmployeeServiceImplTest {
-
 
     private static final String FIRST_NAME_TEST = "TEST_NAME";
     private static final String LAST_NAME_TEST = "TEST_LAST_NAME";
@@ -46,15 +44,18 @@ class EmployeeServiceImplTest {
     public MockitoRule rule = MockitoJUnit.rule();
 
     @BeforeEach
-    public void setup() throws Exception {
+    public void setup() {
         this.employeeFromRepo = new Employee(PESEL_TEST, FIRST_NAME_TEST, LAST_NAME_TEST, SALARY_TEST);
         this.employeeFromController = new EmployeeDto(PESEL_TEST, FIRST_NAME_TEST, LAST_NAME_TEST, SALARY_TEST);
     }
 
     @Test
     void create() throws PeselAlreadyExistException {
+        //given
         when(employeeRepo.create(any())).thenReturn(this.employeeFromRepo);
+        //when
         EmployeeDto employeefromService = employeeServiceImpl.create(employeeFromController);
+        //then
         assertEquals(PESEL_TEST, employeefromService.getPesel());
         assertEquals(employeefromService, employeeServiceImpl.create(employeefromService));
     }
@@ -66,10 +67,10 @@ class EmployeeServiceImplTest {
         when(employeeRepo.read(any())).thenReturn(new Employee("29123123", "bartek", "porebski", BigDecimal.TEN));
         //when
         EmployeeDto read = employeeServiceImpl.read("233321");
+        verify(employeeRepo, times(1)).read(any());
         //then
         assertEquals(read, employeeDto);
     }
-
 
     @Test
     void update() throws PeselAlreadyExistException {
@@ -82,7 +83,8 @@ class EmployeeServiceImplTest {
         //then
         assertNotEquals(employeeDto.getFirstName(), update.getFirstName());
         assertEquals(employeeDto.getLastName(), update.getLastName());
-
+        assertEquals(employeeDto.getPesel(), update.getPesel());
+        assertEquals(employeeDto.getSalary(), employeeDto.getSalary());
     }
 
     @Test
@@ -93,8 +95,6 @@ class EmployeeServiceImplTest {
         boolean delete = employeeServiceImpl.delete("29123123");
         //then
         verify(employeeRepo).delete("29123123");
-
-
     }
 
 }
