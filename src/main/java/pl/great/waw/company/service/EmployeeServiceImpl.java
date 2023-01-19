@@ -6,6 +6,9 @@ import pl.great.waw.company.model.Employee;
 import pl.great.waw.company.repository.EmployeeRepository;
 import pl.great.waw.company.service.EmployeeDto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 public class EmployeeServiceImpl {
@@ -22,6 +25,13 @@ public class EmployeeServiceImpl {
         return empToDto(update);
     }
 
+    public List<EmployeeDto> getAll() {
+        return employeeRepo.getAll()
+                .stream()
+                .map((employee -> {return empToDto(employee);}))
+                .collect(Collectors.toList());
+    }
+
     public EmployeeDto read(String pesel) throws PeselAlreadyExistException {
         return empToDto(employeeRepo.read(pesel));
     }
@@ -34,6 +44,7 @@ public class EmployeeServiceImpl {
     public boolean delete(String pesel) throws PeselAlreadyExistException {
         return employeeRepo.delete(pesel);
     }
+
     public boolean isPeselAlreadyExist(String pesel) {
         return employeeRepo.isPeselAlreadyExist(pesel);
     }

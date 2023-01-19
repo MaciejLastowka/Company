@@ -8,6 +8,7 @@ import java.util.List;
 
 
 public class EmployeeRepository {
+
     private final List<Employee> list = new ArrayList<>();
 
     public Employee create(Employee employee) throws PeselAlreadyExistException {
@@ -17,12 +18,6 @@ public class EmployeeRepository {
         list.add(employee);
         return employee;
     }
-    public boolean contains(Employee employee) throws PeselAlreadyExistException {
-        if(list.contains(employee)){
-            return true;
-        }
-        return false;
-    }
 
     public boolean isPeselAlreadyExist(String pesel) {
         for (Employee employee : list) {
@@ -31,6 +26,10 @@ public class EmployeeRepository {
             }
         }
         return false;
+    }
+
+    public List<Employee> getAll() {
+        return new ArrayList<>(list);
     }
 
     public Employee read(String pesel) throws PeselAlreadyExistException {

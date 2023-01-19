@@ -6,6 +6,8 @@ import pl.great.waw.company.repository.EmployeeRepository;
 import pl.great.waw.company.service.EmployeeDto;
 import pl.great.waw.company.service.EmployeeServiceImpl;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -18,11 +20,10 @@ public class EmployeeController {
         return employeeService.read(pesel);
     }
 
-    @GetMapping(value = "/isPeselAlreadyExist/{pesel}")
-    public boolean isPeselAlreadyExist(@PathVariable String pesel) throws PeselAlreadyExistException {
-        return employeeService.isPeselAlreadyExist(pesel);
+    @GetMapping
+    public List<EmployeeDto> getAll() {
+        return employeeService.getAll();
     }
-
     @PostMapping
     public EmployeeDto create(@RequestBody EmployeeDto employeeDto) throws PeselAlreadyExistException {
         if (employeeService.isPeselAlreadyExist(employeeDto.getPesel())) {
