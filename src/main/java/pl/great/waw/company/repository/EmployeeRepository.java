@@ -17,7 +17,21 @@ public class EmployeeRepository {
         list.add(employee);
         return employee;
     }
+    public boolean contains(Employee employee) throws PeselAlreadyExistException {
+        if(list.contains(employee)){
+            return true;
+        }
+        return false;
+    }
 
+    public boolean isPeselAlreadyExist(String pesel) {
+        for (Employee employee : list) {
+            if (employee.getPesel().equals(pesel)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public Employee read(String pesel) throws PeselAlreadyExistException {
         for (int i = 0; i < list.size(); i++) {

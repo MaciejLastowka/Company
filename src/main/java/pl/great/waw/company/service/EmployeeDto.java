@@ -1,4 +1,4 @@
-package pl.great.waw.company.services;
+package pl.great.waw.company.service;
 
 import java.math.BigDecimal;
 import java.util.Objects;
