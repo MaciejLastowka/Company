@@ -1,6 +1,7 @@
 package pl.great.waw.company.service;
 
 import org.springframework.stereotype.Service;
+import pl.great.waw.company.controller.MapperEmployee.MapperEmployee;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
 import pl.great.waw.company.model.Employee;
 import pl.great.waw.company.repository.EmployeeRepository;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class EmployeeServiceImpl {
+public class EmployeeServiceImpl extends MapperEmployee {
 
     EmployeeRepository employeeRepo;
 
@@ -49,16 +50,4 @@ public class EmployeeServiceImpl {
         return employeeRepo.isPeselAlreadyExist(pesel);
     }
 
-    private EmployeeDto empToDto(Employee employee) {
-        EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setFirstName(employee.getFirstName());
-        employeeDto.setLastName(employee.getLastName());
-        employeeDto.setPesel(employee.getPesel());
-        employeeDto.setSalary(employee.getPrice());
-        return employeeDto;
-    }
-
-    private Employee dtoToEmp(EmployeeDto employeeDto) {
-        return new Employee(employeeDto.getPesel(), employeeDto.getFirstName(), employeeDto.getLastName(), employeeDto.getSalary());
-    }
 }
