@@ -1,19 +1,19 @@
 package pl.great.waw.company.service;
 
 import org.springframework.stereotype.Service;
-import pl.great.waw.company.controller.MapperEmployee.MapperEmployee;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
 import pl.great.waw.company.model.Employee;
 import pl.great.waw.company.repository.EmployeeRepository;
-import pl.great.waw.company.service.EmployeeDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static pl.great.waw.company.Mapper.MapperEmployee.dtoToEmp;
+import static pl.great.waw.company.Mapper.MapperEmployee.empToDto;
+
 
 @Service
-public class EmployeeServiceImpl extends MapperEmployee {
-
+public class EmployeeServiceImpl {
     EmployeeRepository employeeRepo;
 
     public EmployeeServiceImpl(EmployeeRepository employeeRepo) {
@@ -29,7 +29,9 @@ public class EmployeeServiceImpl extends MapperEmployee {
     public List<EmployeeDto> getAll() {
         return employeeRepo.getAll()
                 .stream()
-                .map((employee -> {return empToDto(employee);}))
+                .map((employee -> {
+                    return empToDto(employee);
+                }))
                 .collect(Collectors.toList());
     }
 

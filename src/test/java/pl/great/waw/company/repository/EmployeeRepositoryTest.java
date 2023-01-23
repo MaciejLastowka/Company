@@ -20,12 +20,11 @@ class EmployeeRepositoryTest {
     private static final int TEST_DATA_COUNT = 100000;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         this.employeeRepository = new EmployeeRepository();
         this.employee = new Employee("29123123", "bartek", "porebski", BigDecimal.TEN);
 
     }
-
 
 
     @Test
@@ -69,7 +68,7 @@ class EmployeeRepositoryTest {
         Faker faker = new Faker(new Locale("pl"));
         EmployeeRepository employeeRepository = new EmployeeRepository();
 
-        IntStream.range(0,TEST_DATA_COUNT).forEach((i) -> {
+        IntStream.range(0, TEST_DATA_COUNT).forEach((i) -> {
 
             String pesel = faker.idNumber().invalid();
             String firstName = faker.name().firstName();

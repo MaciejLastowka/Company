@@ -1,11 +1,12 @@
-package pl.great.waw.company.controller.MapperEmployee;
+package pl.great.waw.company.Mapper;
 
 import pl.great.waw.company.model.Employee;
 import pl.great.waw.company.service.EmployeeDto;
 
 
 public class MapperEmployee {
-    protected EmployeeDto empToDto(Employee employee) {
+
+    public static EmployeeDto empToDto(Employee employee) {
         EmployeeDto employeeDto = new EmployeeDto();
         employeeDto.setFirstName(employee.getFirstName());
         employeeDto.setLastName(employee.getLastName());
@@ -14,7 +15,7 @@ public class MapperEmployee {
         return employeeDto;
     }
 
-    protected Employee dtoToEmp(EmployeeDto employeeDto) {
+    public static Employee dtoToEmp(EmployeeDto employeeDto) {
         return new Employee(employeeDto.getPesel(), employeeDto.getFirstName(), employeeDto.getLastName(), employeeDto.getSalary());
     }
 }
