@@ -2,6 +2,7 @@ package pl.great.waw.company.repository;
 
 import org.springframework.stereotype.Repository;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
+import pl.great.waw.company.exceptions.PeselNotFoundException;
 import pl.great.waw.company.model.Employee;
 
 import java.util.ArrayList;
@@ -34,23 +35,23 @@ public class EmployeeRepository {
         return new ArrayList<>(list);
     }
 
-    public Employee read(String pesel) throws PeselAlreadyExistException {
+    public Employee read(String pesel) throws PeselNotFoundException {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getPesel().equals(pesel)) {
                 return list.get(i);
             }
         }
-        throw new PeselAlreadyExistException("This pesel not found: " + pesel);
+        throw new PeselNotFoundException("This pesel not found: " + pesel);
     }
 
-    public Employee update(String pesel, Employee employee) throws PeselAlreadyExistException {
+    public Employee update(String pesel, Employee employee) throws PeselNotFoundException {
         Employee oldEmployee = this.read(pesel);
         int index = list.indexOf(oldEmployee);
         list.set(index, employee);
         return employee;
     }
 
-    public boolean delete(String pesel) throws PeselAlreadyExistException {
+    public boolean delete(String pesel) throws PeselNotFoundException {
         return list.remove(this.read(pesel));
     }
 

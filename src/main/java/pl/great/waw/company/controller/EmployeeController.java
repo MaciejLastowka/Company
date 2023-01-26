@@ -2,6 +2,7 @@ package pl.great.waw.company.controller;
 
 import org.springframework.web.bind.annotation.*;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
+import pl.great.waw.company.exceptions.PeselNotFoundException;
 import pl.great.waw.company.repository.EmployeeRepository;
 import pl.great.waw.company.service.EmployeeDto;
 import pl.great.waw.company.service.EmployeeServiceImpl;
@@ -19,7 +20,7 @@ public class EmployeeController {
     }
 
     @GetMapping(value = "{pesel}")
-    public EmployeeDto get(@PathVariable String pesel) throws PeselAlreadyExistException {
+    public EmployeeDto get(@PathVariable String pesel) throws PeselNotFoundException {
         return employeeService.read(pesel);
     }
 
@@ -30,19 +31,19 @@ public class EmployeeController {
     @PostMapping
     public EmployeeDto create(@RequestBody EmployeeDto employeeDto) throws PeselAlreadyExistException {
         if (employeeService.isPeselAlreadyExist(employeeDto.getPesel())) {
-            throw new PeselAlreadyExistException("istnieje");
+            throw new PeselAlreadyExistException("Pesel already exist: " + employeeDto.getPesel());
         }
         employeeService.create(employeeDto);
         return employeeDto;
     }
 
     @DeleteMapping(value = "{pesel}")
-    public boolean delete(@PathVariable String pesel) throws PeselAlreadyExistException {
+    public boolean delete(@PathVariable String pesel) throws PeselNotFoundException {
         return employeeService.delete(pesel);
     }
 
     @PutMapping(value = "{pesel}")
-    public EmployeeDto update(@PathVariable String pesel, @RequestBody EmployeeDto employeeDto) throws PeselAlreadyExistException {
+    public EmployeeDto update(@PathVariable String pesel, @RequestBody EmployeeDto employeeDto) throws PeselNotFoundException {
         return employeeService.update(pesel, employeeDto);
     }
 

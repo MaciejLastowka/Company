@@ -2,6 +2,7 @@ package pl.great.waw.company.service;
 
 import org.springframework.stereotype.Service;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
+import pl.great.waw.company.exceptions.PeselNotFoundException;
 import pl.great.waw.company.model.Employee;
 import pl.great.waw.company.repository.EmployeeRepository;
 
@@ -20,7 +21,7 @@ public class EmployeeServiceImpl {
         this.employeeRepo = employeeRepo;
     }
 
-    public EmployeeDto update(String pesel, EmployeeDto employeeDto) throws PeselAlreadyExistException {
+    public EmployeeDto update(String pesel, EmployeeDto employeeDto) throws PeselNotFoundException {
         Employee employee = dtoToEmp(employeeDto);
         Employee update = employeeRepo.update(pesel, employee);
         return empToDto(update);
@@ -35,7 +36,7 @@ public class EmployeeServiceImpl {
                 .collect(Collectors.toList());
     }
 
-    public EmployeeDto read(String pesel) throws PeselAlreadyExistException {
+    public EmployeeDto read(String pesel) throws PeselNotFoundException {
         return empToDto(employeeRepo.read(pesel));
     }
 
@@ -44,7 +45,7 @@ public class EmployeeServiceImpl {
         return empToDto(employee);
     }
 
-    public boolean delete(String pesel) throws PeselAlreadyExistException {
+    public boolean delete(String pesel) throws PeselNotFoundException {
         return employeeRepo.delete(pesel);
     }
 

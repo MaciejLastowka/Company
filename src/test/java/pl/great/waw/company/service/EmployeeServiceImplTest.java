@@ -10,6 +10,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
+import pl.great.waw.company.exceptions.PeselNotFoundException;
 import pl.great.waw.company.model.Employee;
 import pl.great.waw.company.repository.EmployeeRepository;
 
@@ -61,7 +62,7 @@ class EmployeeServiceImplTest {
     }
 
     @Test
-    void read() throws PeselAlreadyExistException {
+    void read() throws PeselNotFoundException {
         //given
         EmployeeDto employeeDto = new EmployeeDto("29123123", "bartek", "porebski", BigDecimal.TEN);
         when(employeeRepo.read(any())).thenReturn(new Employee("29123123", "bartek", "porebski", BigDecimal.TEN));
@@ -73,7 +74,7 @@ class EmployeeServiceImplTest {
     }
 
     @Test
-    void update() throws PeselAlreadyExistException {
+    void update() throws PeselNotFoundException {
         //given
         EmployeeDto employeeDto = new EmployeeDto(PESEL_TEST, FIRST_NAME_TEST_UPDATED, LAST_NAME_TEST, BigDecimal.TEN);
         Employee employee = new Employee(PESEL_TEST, FIRST_NAME_TEST, LAST_NAME_TEST, BigDecimal.TEN);
@@ -88,7 +89,7 @@ class EmployeeServiceImplTest {
     }
 
     @Test
-    void delete() throws PeselAlreadyExistException {
+    void delete() throws PeselNotFoundException {
         //given
         when(employeeRepo.delete("29123123")).thenReturn(true);
         //when

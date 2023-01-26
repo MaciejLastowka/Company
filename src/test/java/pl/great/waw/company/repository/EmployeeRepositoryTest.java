@@ -4,6 +4,7 @@ import com.github.javafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
+import pl.great.waw.company.exceptions.PeselNotFoundException;
 import pl.great.waw.company.model.Employee;
 
 import java.math.BigDecimal;
@@ -36,7 +37,7 @@ class EmployeeRepositoryTest {
     }
 
     @Test
-    void read() throws PeselAlreadyExistException {
+    void read() throws PeselAlreadyExistException, PeselNotFoundException {
 
         employeeRepository.create(employee);
         Employee read = employeeRepository.read("29123123");
@@ -44,7 +45,7 @@ class EmployeeRepositoryTest {
     }
 
     @Test
-    void update() throws PeselAlreadyExistException {
+    void update() throws PeselAlreadyExistException, PeselNotFoundException {
 
         Employee employee1 = new Employee("29123123", "sdddd", "sadasdsads", BigDecimal.TEN);
         employeeRepository.create(employee);
@@ -53,7 +54,7 @@ class EmployeeRepositoryTest {
     }
 
     @Test
-    void delete() throws PeselAlreadyExistException {
+    void delete() throws PeselAlreadyExistException, PeselNotFoundException {
 
         Employee employee1 = new Employee("29123123", "sdddd", "sadasdsads", BigDecimal.TEN);
         employeeRepository.create(employee);
