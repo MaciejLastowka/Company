@@ -4,15 +4,16 @@ import org.springframework.stereotype.Service;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
 import pl.great.waw.company.model.Employee;
 import pl.great.waw.company.repository.EmployeeRepository;
-import pl.great.waw.company.service.EmployeeDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static pl.great.waw.company.Mapper.MapperEmployee.dtoToEmp;
+import static pl.great.waw.company.Mapper.MapperEmployee.empToDto;
+
 
 @Service
 public class EmployeeServiceImpl {
-
     EmployeeRepository employeeRepo;
 
     public EmployeeServiceImpl(EmployeeRepository employeeRepo) {
@@ -28,7 +29,9 @@ public class EmployeeServiceImpl {
     public List<EmployeeDto> getAll() {
         return employeeRepo.getAll()
                 .stream()
-                .map((employee -> {return empToDto(employee);}))
+                .map((employee -> {
+                    return empToDto(employee);
+                }))
                 .collect(Collectors.toList());
     }
 
@@ -49,16 +52,4 @@ public class EmployeeServiceImpl {
         return employeeRepo.isPeselAlreadyExist(pesel);
     }
 
-    private EmployeeDto empToDto(Employee employee) {
-        EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setFirstName(employee.getFirstName());
-        employeeDto.setLastName(employee.getLastName());
-        employeeDto.setPesel(employee.getPesel());
-        employeeDto.setSalary(employee.getPrice());
-        return employeeDto;
-    }
-
-    private Employee dtoToEmp(EmployeeDto employeeDto) {
-        return new Employee(employeeDto.getPesel(), employeeDto.getFirstName(), employeeDto.getLastName(), employeeDto.getSalary());
-    }
 }
