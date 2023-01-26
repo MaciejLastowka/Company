@@ -14,12 +14,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.context.WebApplicationContext;
-import pl.great.waw.company.model.Employee;
 import pl.great.waw.company.repository.EmployeeRepository;
 import pl.great.waw.company.service.EmployeeDto;
 import pl.great.waw.company.service.EmployeeServiceImpl;
@@ -27,7 +24,8 @@ import pl.great.waw.company.service.EmployeeServiceImpl;
 import java.math.BigDecimal;
 import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -36,32 +34,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(EmployeeController.class)
+class EmployeeControllerTest {
+    private static final ObjectMapper mapper = new ObjectMapper();
 
-public class EmployeeControllerTest {
     @MockBean
     private EmployeeServiceImpl employeeService;
-    private static final ObjectMapper mapper = new ObjectMapper();
-    @Autowired
-    private WebApplicationContext webApplicationContext;
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @Mock
-    EmployeeRepository employeeRepo;
 
     public EmployeeControllerTest() throws Exception {
-    }
-
-    @Test
-    void shouldCreateMockMvc() {
-        assertNotNull(mockMvc);
     }
 
     int TEST_DATA_COUNT = 100;
 
     @Test
-    public void testPostExample() throws Exception {
+    void testPostExample() throws Exception {
         Faker faker = new Faker(new Locale("pl"));
         for (int i = 0; i < TEST_DATA_COUNT; i++) {
             String pesel = String.valueOf(100 + i);
@@ -80,7 +67,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void testGet() throws Exception {
+    void testGet() throws Exception {
         //given
         EmployeeDto expectedEmployee = new EmployeeDto("123", "AAA", "bbb", BigDecimal.TEN);
         when(employeeService.read(any())).thenReturn(expectedEmployee);
@@ -91,12 +78,12 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.pesel", Matchers.is("123")))
                 .andReturn();
         //then
-        Employee actualEmployee = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Employee.class);
-        //assertEquals(expectedEmployee, actualEmployee));
+        EmployeeDto employeeDto = mapper.readValue(mvcResult.getResponse().getContentAsString(), EmployeeDto.class);
+        assertEquals(expectedEmployee, employeeDto);
     }
 
     @Test
-    public void updateTest() throws Exception {
+    void updateTest() throws Exception {
         //given
         EmployeeDto employee = new EmployeeDto("123", "AAA", "bbb", BigDecimal.TEN);
         EmployeeDto updatedEmployee = new EmployeeDto("123", "NewName", "NewLastName", BigDecimal.TEN);
@@ -104,28 +91,26 @@ public class EmployeeControllerTest {
         //when
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/employee/123").contentType(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedEmployee)))
+                        .content(mapper.writeValueAsString(updatedEmployee)))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(200))
                 .andExpect(jsonPath("$.pesel", Matchers.is("123")))
-                //.andExpect(jsonPath("$.name", Matchers.is("BBB")))
                 .andReturn();
         //then
-        EmployeeDto actualEmployee = objectMapper.readValue(result.getResponse().getContentAsString(), EmployeeDto.class);
+        EmployeeDto actualEmployee = mapper.readValue(result.getResponse().getContentAsString(), EmployeeDto.class);
         assertNotEquals(employee, updatedEmployee);
-         assertEquals("123", employeeService);
+        assertEquals(updatedEmployee, actualEmployee);
     }
 
     @Test
-    public void delete1() throws Exception {
+    void delete1() throws Exception {
         //given
         EmployeeDto employee = new EmployeeDto("123", "AAA", "bbb", BigDecimal.TEN);
         when(employeeService.read(any())).thenReturn(employee);
         //when
-        ResultActions resultActions = mockMvc.perform(delete("/employee/123"))
+        mockMvc.perform(delete("/employee/123"))
                 .andExpect(status().isOk());
         //then
-        assertNull(employeeService);
         verify(employeeService, times(1)).delete("123");
     }
 }
