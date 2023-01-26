@@ -12,8 +12,11 @@ import java.util.List;
 @RequestMapping("/employee")
 public class EmployeeController {
 
-    private final EmployeeRepository employeeRepository = new EmployeeRepository();
-    private final EmployeeServiceImpl employeeService = new EmployeeServiceImpl(employeeRepository);
+    private final EmployeeServiceImpl employeeService;
+
+    public EmployeeController( EmployeeServiceImpl employeeService) {
+        this.employeeService = employeeService;
+    }
 
     @GetMapping(value = "{pesel}")
     public EmployeeDto get(@PathVariable String pesel) throws PeselAlreadyExistException {

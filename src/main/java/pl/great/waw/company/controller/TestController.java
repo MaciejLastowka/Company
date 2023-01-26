@@ -1,22 +1,17 @@
 package pl.great.waw.company.controller;
 
 import com.github.javafaker.Faker;
-import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
 import pl.great.waw.company.service.EmployeeDto;
 
 import java.math.BigDecimal;
-
 import java.util.Locale;
 
-@RestController
-@RequestMapping("/test")
-@Profile("test")
+
 public class TestController {
+
     RestTemplate restTemplate = new RestTemplate();
 
     @GetMapping()
@@ -32,6 +27,4 @@ public class TestController {
         }
         return 100;
     }
-
-
 }
