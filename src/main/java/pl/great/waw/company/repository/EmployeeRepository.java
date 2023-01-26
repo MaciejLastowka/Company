@@ -1,5 +1,6 @@
 package pl.great.waw.company.repository;
 
+import org.springframework.stereotype.Repository;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
 import pl.great.waw.company.model.Employee;
 
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+@Repository
 public class EmployeeRepository {
 
     private final List<Employee> list = new ArrayList<>();
