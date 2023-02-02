@@ -59,10 +59,16 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.9.2</version>
 		</dependency>
+
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-core</artifactId>
 			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>2.14.2</version>
 		</dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -106,9 +112,20 @@
 				</configuration>
 				<dependencies>
 					<dependency>
+
 						<groupId>org.junit.platform</groupId>
 						<artifactId>junit-platform-surefire-provider</artifactId>
 						<version>1.1.0-RC1</version>
+					</dependency>
+					<dependency>
+						<groupId>com.fasterxml.jackson.datatype</groupId>
+						<artifactId>jackson-datatype-jsr310</artifactId>
+						<version>2.14.2</version>
+					</dependency>
+					<dependency>
+						<groupId>com.fasterxml.jackson.core</groupId>
+						<artifactId>jackson-databind</artifactId>
+						<version>2.9.8</version>
 					</dependency>
 					<dependency>
 						<groupId>org.junit.jupiter</groupId>
