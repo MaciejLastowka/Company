@@ -5,6 +5,8 @@ import pl.great.waw.company.exceptions.PeselAlreadyExistException;
 import pl.great.waw.company.exceptions.PeselNotFoundException;
 import pl.great.waw.company.model.Employee;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,17 @@ import java.util.List;
 public class EmployeeRepository {
 
     private final List<Employee> list = new ArrayList<>();
+
+    @PostConstruct
+    void init() {
+        List<Employee> emplFromFile = new ArrayList<>();
+        list.addAll(emplFromFile);
+    }
+
+    @PreDestroy
+    void cache(){
+        System.out.println("mam Cie !");
+    }
 
     public Employee create(Employee employee) throws PeselAlreadyExistException {
         if (list.contains(employee)) {

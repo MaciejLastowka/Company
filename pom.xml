@@ -93,7 +93,6 @@
 		</dependency>
 	</dependencies>
 
-
 	<build>
 		<plugins>
 			<plugin>
@@ -102,7 +101,7 @@
 				<version>2.19.1</version>
 				<configuration>
 					<properties>
-						<excludeTags>${excludeTags}</excludeTags>
+						<excludeTags>integration</excludeTags>
 					</properties>
 				</configuration>
 				<dependencies>

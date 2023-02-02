@@ -13,12 +13,11 @@ import java.util.stream.IntStream;
 
 public class IntegrationTest {
 
-    private RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @Test
     @Tag("integration")
-    void addEmployeeAPI() {
-
+    public void addEmployeeAPI() {
         IntStream.range(0, 100).forEach(i -> {
             Faker faker = new Faker(new Locale("pl"));
             String pesel = UUID.randomUUID().toString();
