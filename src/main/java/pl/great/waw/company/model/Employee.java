@@ -6,12 +6,12 @@ import java.util.Objects;
 
 public class Employee {
 
-    private  String pesel;
-    private  String firstName;
-    private  String lastName;
-    private  BigDecimal price;
-    private  LocalDateTime created;
-    private  LocalDateTime updated;
+    private String pesel;
+    private String firstName;
+    private String lastName;
+    private BigDecimal price;
+    private LocalDateTime created;
+    private LocalDateTime updated;
 
     public Employee() {
 
