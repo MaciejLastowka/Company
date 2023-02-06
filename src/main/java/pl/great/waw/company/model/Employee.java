@@ -2,6 +2,7 @@ package pl.great.waw.company.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Employee {
 
@@ -13,7 +14,9 @@ public class Employee {
     private  LocalDateTime updated;
 
     public Employee() {
+
     }
+
 
     public Employee(String pesel, String firstName, String lastName, BigDecimal price, LocalDateTime created, LocalDateTime updated) {
         this.pesel = pesel;
@@ -59,4 +62,16 @@ public class Employee {
         return updated;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return Objects.equals(pesel, employee.pesel) && Objects.equals(firstName, employee.firstName) && Objects.equals(lastName, employee.lastName) && Objects.equals(price, employee.price) && Objects.equals(created, employee.created) && Objects.equals(updated, employee.updated);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pesel, firstName, lastName, price, created, updated);
+    }
 }
