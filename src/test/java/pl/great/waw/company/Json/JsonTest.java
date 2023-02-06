@@ -57,19 +57,19 @@ class JsonTest {
         List<Employee> employees = objectMapper.readValue(jsonString, new TypeReference<List<Employee>>() {
         });
         //then
+
         assertEquals(expectedEmployees, employees);
     }
 
     @Test
     void writeEmployeeToFile() throws IOException {
-        //given
         List<Employee> employeeList = Arrays.asList(
                 new Employee("29123123", "bartek", "porebski", BigDecimal.TEN),
                 new Employee("11111111", "bartek", "porebski", BigDecimal.TEN));
-        //when
+
+
         filePersistanceUtil.saveDataToFile("employee_list_TEST.json", employeeList);
         File file = new File("employee_list_TEST.json");
-        //then
         assertTrue(file.exists());
 
     }
