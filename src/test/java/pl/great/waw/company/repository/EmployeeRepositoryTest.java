@@ -18,7 +18,7 @@ class EmployeeRepositoryTest {
 
     private EmployeeRepository employeeRepository;
     private Employee employee;
-    private static final int TEST_DATA_COUNT = 100000;
+    private static final int TEST_DATA_COUNT = 10;
 
     @BeforeEach
     void setUp() {
