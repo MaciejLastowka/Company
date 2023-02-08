@@ -1,6 +1,7 @@
 package pl.great.waw.company.controller;
 
 import com.github.javafaker.Faker;
+import jdk.jfr.Category;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;

@@ -44,31 +44,28 @@ class JsonTest {
     }
 
 
-//    @Test
-//    void parseEmployeeFromJsonStringTest() throws JSONException, PeselAlreadyExistException, JsonProcessingException {
-//        //given
-//        String jsonString = "[{\"pesel\":29123123,\"firstName\":\"bartek\",\"lastName\":\"porebski\",\"price\":10}}," +
-//                "{\"pesel\":11111111,\"firstName\":\"bartek\",\"lastName\":\"porebski\",\"price\":10}}]";
-//        List<Employee> expectedEmployees = Arrays.asList(
-//                new Employee("29123123", "bartek", "porebski", BigDecimal.TEN),
-//                new Employee("11111111", "bartek", "porebski", BigDecimal.TEN)
-//        );
-//        //when
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        List<Employee> employees = objectMapper.readValue(jsonString, new TypeReference<List<Employee>>() {
-//        });
-//        //then
-//        assertEquals(expectedEmployees, employees);
-//    }
+    @Test
+    void parseEmployeeFromJsonStringTest() throws JsonProcessingException {
+        //given
+        String jsonString = "[{\"pesel\":555666444,\"firstName\":\"bartek\",\"lastName\":\"porebski\",\"price\":10, \"created\":null, \"updated\":null}," +
+                "{\"pesel\":426842685,\"firstName\":\"jakub\",\"lastName\":\"testowy\",\"price\":10, \"created\":null, \"updated\":null}]";
+        List<Employee> expectedEmployees = Arrays.asList(new Employee("555666444", "bartek", "porebski", BigDecimal.TEN, null, null),
+                new Employee("426842685", "jakub", "testowy", BigDecimal.TEN, null, null));
+        //when
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Employee> employees = objectMapper.readValue(jsonString, new TypeReference<List<Employee>>() {
+        });
+        //then
+        assertEquals(expectedEmployees, employees);
+    }
 
     @Test
     void writeEmployeeToFile() throws IOException {
-        List<Employee> employeeList = Arrays.asList(
-                new Employee("29123123", "bartek", "porebski", BigDecimal.TEN),
+        List<Employee> employeeList = Arrays.asList(new Employee("29123123", "bartek", "porebski", BigDecimal.TEN),
                 new Employee("11111111", "bartek", "porebski", BigDecimal.TEN));
 
 
-        filePersistanceUtil.saveDataToFile("employee_list_TEST.json",employeeList );
+        filePersistanceUtil.saveDataToFile("employee_list_TEST.json", employeeList);
         File file = new File("employee_list_TEST.json");
         assertTrue(file.exists());
 
