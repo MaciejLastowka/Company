@@ -3,27 +3,20 @@ package pl.great.waw.company.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class EmployeeData {
+public class EmployeeMonthlyData {
     private String id;
     private String employeeId;
     private int month;
     private BigDecimal monthlySalary;
     private int year;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
 
-    public EmployeeData(String id, String employeeId, int month, BigDecimal monthlySalary, int year, LocalDateTime createdAt, LocalDateTime updatedAt) {
-    }
-
-    public EmployeeData(String id, String employeeId, int month, BigDecimal monthlySalary, int year, int i, String aNull) {
+    public EmployeeMonthlyData(String id, String employeeId, int month, BigDecimal monthlySalary, int year) {
         this.id = id;
         this.employeeId = employeeId;
         this.month = month;
         this.monthlySalary = monthlySalary;
         this.year = year;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
 
 
@@ -47,13 +40,6 @@ public class EmployeeData {
         return year;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
 
     @Override
     public String toString() {
@@ -63,8 +49,6 @@ public class EmployeeData {
                 ", month = " + month +
                 ", monthlySalary = " + monthlySalary +
                 ", year = " + year +
-                ", createdAt = " + createdAt +
-                ", updatedAt = " + updatedAt +
                 '}';
     }
 }

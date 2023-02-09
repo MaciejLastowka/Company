@@ -13,7 +13,7 @@ public class RestResponseEntityExceptionHandler
         extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value
-            = { PeselNotFoundException.class })
+            = {PeselNotFoundException.class})
     protected ResponseEntity<Object> handleConflict(
             PeselNotFoundException exception, WebRequest request) {
 
@@ -22,12 +22,18 @@ public class RestResponseEntityExceptionHandler
     }
 
     @ExceptionHandler(value
-            = { PeselAlreadyExistException.class })
+            = {PeselAlreadyExistException.class})
     protected ResponseEntity<Object> handleConflict(
             PeselAlreadyExistException exception, WebRequest request) {
         return handleExceptionInternal(exception, "Podany pesel już istnieje!",
                 new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
-
+    @ExceptionHandler(value
+            = {MonthAlreadyAddedException.class})
+    protected ResponseEntity<Object> handleConflict(
+            MonthAlreadyAddedException exception, WebRequest request) {
+        return handleExceptionInternal(exception, "Nie można dodać więcej niż: 12 miesięcy w roku",
+                new HttpHeaders(), HttpStatus.CONFLICT, request);
+    }
 }

@@ -1,57 +1,56 @@
 package pl.great.waw.company.repository;
 
 import org.springframework.stereotype.Repository;
-import pl.great.waw.company.exceptions.PeselAlreadyExistException;
-import pl.great.waw.company.exceptions.PeselNotFoundException;
-import pl.great.waw.company.model.EmployeeData;
+import pl.great.waw.company.exceptions.MonthAlreadyAddedException;
+import pl.great.waw.company.exceptions.MonthNotFoundException;
+import pl.great.waw.company.model.EmployeeMonthlyData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class EmployeeDataRepo {
+    private final List<EmployeeMonthlyData> employeeMonthlyDataList = new ArrayList<>();
+    private final int maxMonthsPerYear = 12;
 
-    private final List<EmployeeData> employeeDataList = new ArrayList<>();
+    public  EmployeeMonthlyData createData(EmployeeMonthlyData employeeMonthlyData) throws MonthAlreadyAddedException {
+        int currentYearMonths = (int) employeeMonthlyDataList.stream()
+                .filter(data -> data.getEmployeeId().equals(employeeMonthlyData.getEmployeeId()))
+                .filter(data -> data.getYear() == employeeMonthlyData.getYear())
+                .count();
 
-    public EmployeeData createData(EmployeeData employeeData) throws PeselAlreadyExistException {
-        if (employeeDataList.contains(employeeData)) {
-            throw new PeselAlreadyExistException(("This pesel already exist: " + employeeData.getId()));
+        if (currentYearMonths >= maxMonthsPerYear) {
+            throw new MonthAlreadyAddedException("Already added 12 months for employee " + employeeMonthlyData.getEmployeeId() + " in year " + employeeMonthlyData.getYear());
         }
-        employeeDataList.add(employeeData);
-        System.out.println("ADDED EMPLOYEE " + employeeData.toString());
-        return employeeData;
+        employeeMonthlyDataList.add(employeeMonthlyData);
+        return employeeMonthlyData;
     }
 
-    public boolean isPeselAlreadyExist(String id) {
-        for (EmployeeData employeeData : employeeDataList) {
-            if (employeeData.getId().equals(id)) {
-                return true;
+    public boolean isEmployeeIdAlreadyExist(String employeeId) {
+        return employeeMonthlyDataList.stream().anyMatch(data -> data.getEmployeeId().equals(employeeId));
+    }
+
+    public EmployeeMonthlyData readData(String employeeId, int year, int month) throws MonthNotFoundException {
+        for (EmployeeMonthlyData employeeMonthlyData : employeeMonthlyDataList) {
+            if (employeeMonthlyData.getEmployeeId().equals(employeeId) && employeeMonthlyData.getYear() == year && employeeMonthlyData.getMonth() == month) {
+                return employeeMonthlyData;
             }
         }
-        return false;
+        throw new MonthNotFoundException("Dane podanego miesiąca nie zostały znalezione: " + employeeId + " " + year + " " + month);
     }
 
-    public EmployeeData readData(String id) throws PeselNotFoundException {
-        for (EmployeeData employeeData : employeeDataList) {
-            if (employeeData.getId().equals(id)) {
-                return employeeData;
-            }
-        }
-        throw new PeselNotFoundException("This ID not found: " + id);
+    public EmployeeMonthlyData updateData(String employeeId, int year, int month, EmployeeMonthlyData employeeMonthlyData) throws MonthNotFoundException {
+        EmployeeMonthlyData oldData = this.readData(employeeId, year, month);
+        int index = employeeMonthlyDataList.indexOf(oldData);
+        employeeMonthlyDataList.set(index, employeeMonthlyData);
+        return employeeMonthlyData;
     }
 
-    public EmployeeData updateData(String id, EmployeeData employeeData) throws PeselNotFoundException {
-        EmployeeData oldEmployeeData = this.readData(id);
-        int index = employeeDataList.indexOf(oldEmployeeData);
-        employeeDataList.set(index, employeeData);
-        return employeeData;
+    public boolean deleteData(String employeeId, int year, int month) throws MonthNotFoundException {
+        return employeeMonthlyDataList.remove(this.readData(employeeId, year, month));
     }
 
-    public boolean deleteData(String id) throws PeselNotFoundException {
-        return employeeDataList.remove(this.readData(id));
-    }
-
-    public int size() {
-        return employeeDataList.size();
+    public int sizeData() {
+        return employeeMonthlyDataList.size();
     }
 }

@@ -18,4 +18,5 @@ public class MapperEmployee {
     public static Employee dtoToEmp(EmployeeDto employeeDto) {
         return new Employee(employeeDto.getPesel(), employeeDto.getFirstName(), employeeDto.getLastName(), employeeDto.getSalary());
     }
+
 }
