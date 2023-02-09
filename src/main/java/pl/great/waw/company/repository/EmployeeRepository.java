@@ -19,7 +19,7 @@ public class EmployeeRepository {
             throw new PeselAlreadyExistException(("This pesel already exist: " + employee.getPesel()));
         }
         list.add(employee);
-        System.out.println("ADDED EMPLOYEE "+employee.toString());
+       // System.out.println("ADDED EMPLOYEE "+employee.toString());
         return employee;
     }
 

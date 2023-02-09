@@ -10,5 +10,4 @@ public class CompanyApplication {
 	public static void main(String[] args) {
 		ConfigurableApplicationContext run = SpringApplication.run(CompanyApplication.class, args);
 	}
-
 }
