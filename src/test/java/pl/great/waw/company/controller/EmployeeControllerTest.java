@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pl.great.waw.company.repository.EmployeeRepository;
+import pl.great.waw.company.service.EmployeeDataDto;
 import pl.great.waw.company.service.EmployeeDto;
 import pl.great.waw.company.service.EmployeeServiceImpl;
 
@@ -48,7 +49,7 @@ class EmployeeControllerTest {
     int TEST_DATA_COUNT = 100;
 
     @Test
-    void testPostExample() throws Exception {
+    void testPost() throws Exception {
         Faker faker = new Faker(new Locale("pl"));
         for (int i = 0; i < TEST_DATA_COUNT; i++) {
             String pesel = String.valueOf(100 + i);
@@ -58,6 +59,26 @@ class EmployeeControllerTest {
             EmployeeDto employeeDto = new EmployeeDto(pesel, firstName, lastName, salary);
             when(employeeService.create(ArgumentMatchers.any())).thenReturn(employeeDto);
             String json = mapper.writeValueAsString(employeeDto);
+            mockMvc.perform(post("/employee")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding("utf-8").content(json)
+                            .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+                    .andExpect(jsonPath("$.pesel", Matchers.equalTo(String.valueOf(100 + i))));
+        }
+    }
+
+    @Test
+    void testPostData() throws Exception {
+        Faker faker = new Faker(new Locale("pl"));
+        for (int i = 0; i < TEST_DATA_COUNT; i++) {
+            String id = String.valueOf(i);
+            String employeeId = String.valueOf(100 + i);
+            int month = faker.number().numberBetween(1,12);
+            BigDecimal monthlySalary = new BigDecimal(faker.number().randomNumber());
+            int year = faker.number().numberBetween(2016,2023);
+            EmployeeDataDto employeeDataDto = new EmployeeDataDto(id,employeeId, month, monthlySalary, year);
+            when(employeeService.create(ArgumentMatchers.any())).thenReturn(employeeDataDto);
+            String json = mapper.writeValueAsString(employeeDataDto);
             mockMvc.perform(post("/employee")
                             .contentType(MediaType.APPLICATION_JSON)
                             .characterEncoding("utf-8").content(json)
