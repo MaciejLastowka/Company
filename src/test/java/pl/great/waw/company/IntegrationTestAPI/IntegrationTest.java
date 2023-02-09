@@ -24,7 +24,7 @@ public class IntegrationTest {
             String firstName = faker.name().firstName();
             String lastName = faker.name().lastName();
             BigDecimal salary = new BigDecimal(faker.number().randomNumber());
-            EmployeeDto employeeDto = new EmployeeDto(pesel, firstName, lastName, salary);
+            EmployeeDto employeeDto = new EmployeeDto(pesel, firstName, lastName, salary,null );
             restTemplate.postForEntity("http://localhost:8081/employee", employeeDto, EmployeeDto.class);
         });
     }

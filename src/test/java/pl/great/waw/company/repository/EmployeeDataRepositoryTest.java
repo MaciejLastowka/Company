@@ -7,14 +7,16 @@ import pl.great.waw.company.exceptions.MonthNotFoundException;
 import pl.great.waw.company.model.EmployeeMonthlyData;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class EmployeeDataRepositoryTest {
+class EmployeeDataRepositoryTest {
 
-    EmployeeDataRepo employeeDataRepo;
+    private EmployeeDataRepo employeeDataRepo;
     private EmployeeMonthlyData employeeMonthlyData;
+
     private static final int TEST_DATA_COUNT = 12;
 
     @BeforeEach
@@ -25,7 +27,7 @@ public class EmployeeDataRepositoryTest {
     }
 
     @Test
-    public void testCreateData() throws MonthAlreadyAddedException {
+    void testCreateData() throws MonthAlreadyAddedException {
         //when
         EmployeeMonthlyData createdData = employeeDataRepo.createData(employeeMonthlyData);
         //then
@@ -33,13 +35,13 @@ public class EmployeeDataRepositoryTest {
     }
 
     @Test
-    public void testReadData() throws MonthAlreadyAddedException, MonthNotFoundException {
+    void testReadData() throws MonthAlreadyAddedException, MonthNotFoundException {
         //given
         EmployeeMonthlyData createdData = employeeDataRepo.createData(employeeMonthlyData);
         //when
-        EmployeeMonthlyData readData = employeeDataRepo.readData(createdData.getEmployeeId(), 2023, 1);
+        List<EmployeeMonthlyData> employeeMonthlyData = employeeDataRepo.readData(createdData.getEmployeeId());
         //then
-        assertEquals(employeeMonthlyData, readData);
+        assertEquals(this.employeeMonthlyData, employeeMonthlyData.get(0));
     }
 
     @Test

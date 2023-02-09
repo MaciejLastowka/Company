@@ -10,46 +10,66 @@ import pl.great.waw.company.model.EmployeeMonthlyData;
 import pl.great.waw.company.repository.EmployeeDataRepo;
 import pl.great.waw.company.repository.EmployeeRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static pl.great.waw.company.Mapper.MapperEmployee.dtoToEmp;
 import static pl.great.waw.company.Mapper.MapperEmployee.empToDto;
 import static pl.great.waw.company.Mapper.MapperEmployeeData.dtoToEmpData;
-import static pl.great.waw.company.Mapper.MapperEmployeeData.empDataToDto;
 
 
 @Service
 public class EmployeeServiceImpl {
-    EmployeeRepository employeeRepo;
-    EmployeeDataRepo employeeDataRepo;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepo) {
+    private final EmployeeRepository employeeRepo;
+    private final EmployeeDataRepo employeeDataRepo;
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepo, EmployeeDataRepo employeeDataRepo) {
         this.employeeRepo = employeeRepo;
-    }
-
-    public EmployeeDto update(String pesel, EmployeeDto employeeDto) throws PeselNotFoundException {
-        Employee employee = dtoToEmp(employeeDto);
-        Employee update = employeeRepo.update(pesel, employee);
-        return empToDto(update);
-    }
-
-    public List<EmployeeDto> getAll() {
-        return employeeRepo.getAll()
-                .stream()
-                .map((employee -> {
-                    return empToDto(employee);
-                }))
-                .collect(Collectors.toList());
-    }
-
-    public EmployeeDto read(String pesel) throws PeselNotFoundException {
-        return empToDto(employeeRepo.read(pesel));
+        this.employeeDataRepo = employeeDataRepo;
     }
 
     public EmployeeDto create(EmployeeDto employeeDto) throws PeselAlreadyExistException {
         Employee employee = employeeRepo.create(dtoToEmp(employeeDto));
-        return empToDto(employee);
+        return empToDto(employee, new ArrayList<>());
+    }
+
+    public EmployeeMonthlyData createData(EmployeeDataDto employeeDataDto) throws MonthAlreadyAddedException, PeselNotFoundException, MonthNotFoundException {
+
+        this.employeeRepo.read(employeeDataDto.getEmployeeId());
+
+        List<EmployeeMonthlyData> employeeMonthlyDataListFromDb = this.employeeDataRepo.readData(employeeDataDto.getEmployeeId());
+
+        List<EmployeeMonthlyData> employeeMonthlyDataList = employeeMonthlyDataListFromDb.stream()
+                .filter(
+                        employeeMonthlyData1 -> employeeMonthlyData1.getMonth() == employeeDataDto.getMonth()
+                                && employeeMonthlyData1.getYear() == employeeDataDto.getYear()).collect(Collectors.toList());
+
+        if(!employeeMonthlyDataList.isEmpty()){
+            throw new MonthAlreadyAddedException("Ten miesiąc i rok już został dodany");
+        }
+
+        return employeeDataRepo.createData(dtoToEmpData(employeeDataDto));
+    }
+
+    public EmployeeDto read(String pesel) throws PeselNotFoundException {
+        Employee employee = employeeRepo.read(pesel);
+        List<EmployeeMonthlyData> employeeMonthlyData = this.employeeDataRepo.readData(pesel);
+        return empToDto(employee, employeeMonthlyData);
+    }
+
+//    public EmployeeDto update(String pesel, EmployeeDto employeeDto) throws PeselNotFoundException {
+//        Employee employee = dtoToEmp(employeeDto);
+//        Employee update = employeeRepo.update(pesel, employee);
+//        return empToDto(update);
+//    }
+
+    public List<EmployeeDto> getAll() {
+        return employeeRepo.getAll()
+                .stream()
+                .map(employee -> empToDto(employee, employeeDataRepo.readData(employee.getPesel())))
+                .collect(Collectors.toList());
     }
 
     public boolean delete(String pesel) throws PeselNotFoundException {
@@ -60,20 +80,9 @@ public class EmployeeServiceImpl {
         return employeeRepo.isPeselAlreadyExist(pesel);
     }
 
-    public EmployeeMonthlyData createData(EmployeeDataDto employeeDataDto) throws MonthAlreadyAddedException {
-        EmployeeMonthlyData employeeMonthlyData = employeeDataRepo.createData(dtoToEmpData(employeeDataDto));
-        return employeeMonthlyData;
-    }
-
-    public EmployeeDataDto readData(String employeeId, int month, int year) throws MonthNotFoundException {
-        return empDataToDto(employeeDataRepo.readData(employeeId, month, year));
-    }
-
     public boolean isEmployeeIdAlreadyExist(String employeeId) {
         return employeeDataRepo.isEmployeeIdAlreadyExist(employeeId);
     }
-
-
 }
 
 

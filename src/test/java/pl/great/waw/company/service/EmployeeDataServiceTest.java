@@ -12,6 +12,7 @@ import org.mockito.junit.MockitoRule;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.great.waw.company.exceptions.MonthAlreadyAddedException;
 import pl.great.waw.company.exceptions.MonthNotFoundException;
+import pl.great.waw.company.exceptions.PeselNotFoundException;
 import pl.great.waw.company.model.EmployeeMonthlyData;
 import pl.great.waw.company.repository.EmployeeDataRepo;
 
@@ -53,7 +54,7 @@ public class EmployeeDataServiceTest {
     }
 
     @Test
-    public void createData() throws MonthAlreadyAddedException {
+     void createData() throws MonthAlreadyAddedException, MonthNotFoundException, PeselNotFoundException {
         //given
         when(employeeDataRepo.createData(any())).thenReturn(this.employeeMonthlyData);
         //when
@@ -62,16 +63,5 @@ public class EmployeeDataServiceTest {
         assertEquals(employeeMonthlyData, result);
     }
 
-    @Test
-    public void readData() throws MonthNotFoundException, MonthAlreadyAddedException {
-        //given
-        EmployeeDataDto employeeDataDto = new EmployeeDataDto("11111", "123",
-                1, BigDecimal.TEN, 2023);
-        when(employeeDataRepo.readData("123", 1, 2023)).thenReturn(new EmployeeMonthlyData("11111", "123",
-                1, BigDecimal.TEN, 2023));
-        //when
-        EmployeeDataDto read = employeeServiceImpl.readData("123", 1, 2023);
-        //then
-        assertEquals(read, employeeDataDto);
-    }
+
 }
