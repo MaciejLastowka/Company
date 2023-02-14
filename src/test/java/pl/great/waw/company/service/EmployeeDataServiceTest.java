@@ -6,21 +6,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.great.waw.company.exceptions.MonthAlreadyAddedException;
 import pl.great.waw.company.exceptions.MonthNotFoundException;
 import pl.great.waw.company.exceptions.PeselNotFoundException;
-import pl.great.waw.company.model.Employee;
 import pl.great.waw.company.model.EmployeeMonthlyData;
-import pl.great.waw.company.repository.EmployeeDataRepo;
 import pl.great.waw.company.repository.EmployeeRepository;
+import pl.great.waw.company.repository.EmployeeDataRepo;
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
