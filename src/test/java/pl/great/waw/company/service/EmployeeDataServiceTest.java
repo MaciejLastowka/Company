@@ -17,6 +17,8 @@ import pl.great.waw.company.model.EmployeeMonthlyData;
 import pl.great.waw.company.repository.EmployeeDataRepo;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -62,6 +64,17 @@ public class EmployeeDataServiceTest {
         //then
         assertEquals(employeeMonthlyData, result);
     }
+
+//    @Test
+//    void readData() throws MonthAlreadyAddedException, MonthNotFoundException, PeselNotFoundException {
+//        //given
+//
+//        when(employeeDataRepo.readData(employeeDataDto.getEmployeeId())).thenReturn(Collections.singletonList(this.employeeMonthlyData));
+//        //when
+//        List<EmployeeMonthlyData> result = this.employeeServiceImpl.read(employeeDataDto.getEmployeeId());
+//        //then
+//        assertEquals(employeeMonthlyData, result);
+//    }
 
 
 }
