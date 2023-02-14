@@ -15,6 +15,7 @@ import pl.great.waw.company.exceptions.MonthNotFoundException;
 import pl.great.waw.company.exceptions.PeselNotFoundException;
 import pl.great.waw.company.model.EmployeeMonthlyData;
 import pl.great.waw.company.repository.EmployeeDataRepo;
+import pl.great.waw.company.repository.EmployeeRepository;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -35,7 +36,8 @@ public class EmployeeDataServiceTest {
 
     @Mock
     EmployeeDataRepo employeeDataRepo;
-
+    @Mock
+    EmployeeRepository employeeRepository;
     @InjectMocks
     EmployeeServiceImpl employeeServiceImpl;
 
@@ -50,7 +52,7 @@ public class EmployeeDataServiceTest {
     @BeforeEach
     public void setUpData() {
         MockitoAnnotations.initMocks(this);
-        this.employeeDataDto = new EmployeeDataDto();
+        this.employeeDataDto = new EmployeeDataDto("11111","123",1,BigDecimal.TEN, 2023);
         this.employeeMonthlyData = new EmployeeMonthlyData("11111", "123",
                 1, BigDecimal.TEN, 2023);
     }
@@ -58,7 +60,7 @@ public class EmployeeDataServiceTest {
     @Test
      void createData() throws MonthAlreadyAddedException, MonthNotFoundException, PeselNotFoundException {
         //given
-        when(employeeDataRepo.createData(any())).thenReturn(this.employeeMonthlyData);
+        when(employeeDataRepo.createData(any())).thenReturn(employeeMonthlyData);
         //when
         EmployeeMonthlyData result = employeeServiceImpl.createData(employeeDataDto);
         //then
