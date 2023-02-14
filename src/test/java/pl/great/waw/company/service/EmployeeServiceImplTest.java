@@ -15,7 +15,7 @@ import pl.great.waw.company.model.Employee;
 import pl.great.waw.company.repository.EmployeeRepository;
 
 import java.math.BigDecimal;
-
+import static pl.great.waw.company.Mapper.MapperEmployee.empToDto;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
