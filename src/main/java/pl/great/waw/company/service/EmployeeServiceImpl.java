@@ -11,6 +11,7 @@ import pl.great.waw.company.repository.EmployeeDataRepo;
 import pl.great.waw.company.repository.EmployeeRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,10 +25,12 @@ public class EmployeeServiceImpl {
 
     private final EmployeeRepository employeeRepo;
     private final EmployeeDataRepo employeeDataRepo;
+    private final EmployeeMonthlyData employeeMonthlyData;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepo, EmployeeDataRepo employeeDataRepo) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepo, EmployeeDataRepo employeeDataRepo, EmployeeMonthlyData employeeMonthlyData) {
         this.employeeRepo = employeeRepo;
         this.employeeDataRepo = employeeDataRepo;
+        this.employeeMonthlyData = employeeMonthlyData;
     }
 
     public EmployeeDto create(EmployeeDto employeeDto) throws PeselAlreadyExistException {
@@ -46,7 +49,7 @@ public class EmployeeServiceImpl {
                         employeeMonthlyData1 -> employeeMonthlyData1.getMonth() == employeeDataDto.getMonth()
                                 && employeeMonthlyData1.getYear() == employeeDataDto.getYear()).collect(Collectors.toList());
 
-        if(!employeeMonthlyDataList.isEmpty()){
+        if (!employeeMonthlyDataList.isEmpty()) {
             throw new MonthAlreadyAddedException("Ten miesiąc i rok już został dodany");
         }
 
@@ -59,11 +62,21 @@ public class EmployeeServiceImpl {
         return empToDto(employee, employeeMonthlyData);
     }
 
-//    public EmployeeDto update(String pesel, EmployeeDto employeeDto) throws PeselNotFoundException {
-//        Employee employee = dtoToEmp(employeeDto);
-//        Employee update = employeeRepo.update(pesel, employee);
-//        return empToDto(update);
-//    }
+    public EmployeeDto update(String pesel, EmployeeDto employeeDto) throws PeselNotFoundException {
+        Employee updatedEmployee = dtoToEmp(employeeDto);
+        Employee update = employeeRepo.read(pesel);
+        employeeRepo.update(pesel, updatedEmployee);
+        return empToDto(updatedEmployee, Collections.singletonList(employeeMonthlyData));
+    }
+
+    public EmployeeMonthlyData updateData(String employeeId, EmployeeMonthlyData employeeMonthlyData) throws MonthNotFoundException {
+        List<EmployeeMonthlyData> employeeMonthlyDataList = employeeDataRepo.readData(employeeId);
+        int index = employeeMonthlyDataList.indexOf(employeeMonthlyData);
+        if (index != -1) {
+            employeeMonthlyDataList.set(index, employeeMonthlyData);
+        }
+        return employeeMonthlyData;
+    }
 
     public List<EmployeeDto> getAll() {
         return employeeRepo.getAll()

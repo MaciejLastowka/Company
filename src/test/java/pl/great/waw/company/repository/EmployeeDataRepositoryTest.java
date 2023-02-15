@@ -45,6 +45,18 @@ class EmployeeDataRepositoryTest {
     }
 
     @Test
+    void testUpdateData() throws MonthAlreadyAddedException, MonthNotFoundException {
+        //given
+        EmployeeMonthlyData createdData = employeeDataRepo.createData(employeeMonthlyData);
+        EmployeeMonthlyData newData = new EmployeeMonthlyData(createdData.getId(), createdData.getEmployeeId(),
+                createdData.getMonth(), BigDecimal.valueOf(1500), createdData.getYear());
+        //when
+        EmployeeMonthlyData updatedData = employeeDataRepo.updateData(createdData.getEmployeeId(), newData);
+        //then
+        assertEquals(newData, updatedData);
+    }
+
+    @Test
     void isEmployeeIdAlreadyExist() {
         assertFalse(employeeDataRepo.isEmployeeIdAlreadyExist("11111"));
     }

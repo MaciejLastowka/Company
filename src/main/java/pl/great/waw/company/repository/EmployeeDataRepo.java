@@ -7,12 +7,15 @@ import pl.great.waw.company.model.EmployeeMonthlyData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
 public class EmployeeDataRepo {
     private final List<EmployeeMonthlyData> employeeMonthlyDataList = new ArrayList<>();
     private final int maxMonthsPerYear = 12;
+    private EmployeeDataRepo employeeDataRepo;
 
     public EmployeeMonthlyData createData(EmployeeMonthlyData employeeMonthlyData) throws MonthAlreadyAddedException {
 
@@ -30,16 +33,22 @@ public class EmployeeDataRepo {
                 .collect(Collectors.toList());
     }
 
-//    public EmployeeMonthlyData updateData(String employeeId, int year, int month, EmployeeMonthlyData employeeMonthlyData) throws MonthNotFoundException {
-//        EmployeeMonthlyData oldData = this.readData(employeeId, year, month);
-//        int index = employeeMonthlyDataList.indexOf(oldData);
-//        employeeMonthlyDataList.set(index, employeeMonthlyData);
-//        return employeeMonthlyData;
-//    }
+    public EmployeeMonthlyData updateData(String employeeId, EmployeeMonthlyData employeeMonthlyData) throws MonthNotFoundException {
+        List<EmployeeMonthlyData> employeeMonthlyDataList = this.employeeDataRepo.readData(employeeId);
+        Optional<EmployeeMonthlyData> oldData = employeeMonthlyDataList.stream()
+                .filter(data -> {
+                    return Objects.equals(data.getMonth(), employeeMonthlyData.getMonth());
+                })
+                .findFirst();
+        int index = employeeMonthlyDataList.indexOf(oldData);
+        employeeMonthlyDataList.set(index, employeeMonthlyData);
+        return employeeMonthlyData;
+    }
 
-//    public boolean deleteData(String employeeId, int year, int month) throws MonthNotFoundException {
-//        return employeeMonthlyDataList.remove(this.readData(employeeId, year, month));
-//    }
+
+    public boolean deleteData(String employeeId) throws MonthNotFoundException {
+        return employeeMonthlyDataList.remove(this.readData(employeeId));
+    }
 
     public int sizeData() {
         return employeeMonthlyDataList.size();

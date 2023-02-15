@@ -56,7 +56,7 @@ public class EmployeeDataServiceTest {
     }
 
     @Test
-     void createData() throws MonthAlreadyAddedException, MonthNotFoundException, PeselNotFoundException {
+    void createData() throws MonthAlreadyAddedException, MonthNotFoundException, PeselNotFoundException {
         //given
         when(employeeDataRepo.createData(any())).thenReturn(this.employeeMonthlyData);
         when(employeeRepository.read(any())).thenReturn(new Employee());

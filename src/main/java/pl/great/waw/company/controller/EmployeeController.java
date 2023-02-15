@@ -5,6 +5,7 @@ import pl.great.waw.company.exceptions.MonthAlreadyAddedException;
 import pl.great.waw.company.exceptions.MonthNotFoundException;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
 import pl.great.waw.company.exceptions.PeselNotFoundException;
+import pl.great.waw.company.model.EmployeeMonthlyData;
 import pl.great.waw.company.service.EmployeeDataDto;
 import pl.great.waw.company.service.EmployeeDto;
 import pl.great.waw.company.service.EmployeeServiceImpl;
@@ -44,20 +45,26 @@ public class EmployeeController {
     }
 
     @PostMapping("/createData")
-    public EmployeeDataDto createData(@RequestBody EmployeeDataDto employeeDataDto) throws MonthNotFoundException, MonthAlreadyAddedException, PeselNotFoundException  {
+    public EmployeeDataDto createData(@RequestBody EmployeeDataDto employeeDataDto) throws MonthNotFoundException, MonthAlreadyAddedException, PeselNotFoundException {
 
         employeeService.createData(employeeDataDto);
 
         return employeeDataDto;
     }
 
-//    @DeleteMapping(value = "{pesel}")
-//    public boolean delete(@PathVariable String pesel) throws PeselNotFoundException {
-//        return employeeService.delete(pesel);
-//    }
+    @PutMapping(value = "{pesel}")
+    public EmployeeDto update(@PathVariable String pesel, @RequestBody EmployeeDto employeeDto) throws PeselNotFoundException {
+        return employeeService.update(pesel, employeeDto);
+    }
+    @PutMapping(value = "/{employeeId}/monthly-data")
+    public EmployeeMonthlyData updateData(@PathVariable String employeeId, @RequestBody EmployeeMonthlyData employeeMonthlyData) throws MonthNotFoundException {
+        return employeeService.updateData(employeeId, employeeMonthlyData);
+    }
 
-//    @PutMapping(value = "{pesel}")
-//    public EmployeeDto update(@PathVariable String pesel, @RequestBody EmployeeDto employeeDto) throws PeselNotFoundException {
-//        return employeeService.update(pesel, employeeDto);
-//    }
+    @DeleteMapping(value = "{pesel}")
+    public boolean delete(@PathVariable String pesel) throws PeselNotFoundException {
+        return employeeService.delete(pesel);
+    }
+
+
 }

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.great.waw.company.model.Employee;
+import pl.great.waw.company.model.EmployeeMonthlyData;
 
 import java.util.List;
 
@@ -31,6 +32,11 @@ public class JsonParsing {
         objectMapper.registerModule(new JSR310Module());
 
         return objectMapper.writeValueAsString(employeeList);
+    }
+    public String parseEmployeeData(List<EmployeeMonthlyData>employeeMonthlyDataList) throws JsonProcessingException {
+        objectMapper.registerModule(new JSR310Module());
+
+        return objectMapper.writeValueAsString(employeeMonthlyDataList);
     }
 
 }
