@@ -13,8 +13,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pl.great.waw.company.exceptions.MonthAlreadyAddedException;
 import pl.great.waw.company.exceptions.MonthNotFoundException;
 import pl.great.waw.company.exceptions.PeselNotFoundException;
+import pl.great.waw.company.model.Employee;
 import pl.great.waw.company.model.EmployeeMonthlyData;
 import pl.great.waw.company.repository.EmployeeDataRepo;
+import pl.great.waw.company.repository.EmployeeRepository;
 
 import java.math.BigDecimal;
 
@@ -34,6 +36,9 @@ public class EmployeeDataServiceTest {
     @Mock
     EmployeeDataRepo employeeDataRepo;
 
+    @Mock
+    EmployeeRepository employeeRepository;
+
     @InjectMocks
     EmployeeServiceImpl employeeServiceImpl;
 
@@ -47,7 +52,6 @@ public class EmployeeDataServiceTest {
     @Test
     @BeforeEach
     public void setUpData() {
-        MockitoAnnotations.initMocks(this);
         this.employeeDataDto = new EmployeeDataDto();
         this.employeeMonthlyData = new EmployeeMonthlyData("11111", "123",
                 1, BigDecimal.TEN, 2023);
@@ -57,6 +61,7 @@ public class EmployeeDataServiceTest {
      void createData() throws MonthAlreadyAddedException, MonthNotFoundException, PeselNotFoundException {
         //given
         when(employeeDataRepo.createData(any())).thenReturn(this.employeeMonthlyData);
+        when(employeeRepository.read(any())).thenReturn(new Employee());
         //when
         EmployeeMonthlyData result = employeeServiceImpl.createData(employeeDataDto);
         //then
