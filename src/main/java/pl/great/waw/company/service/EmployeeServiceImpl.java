@@ -8,7 +8,6 @@ import pl.great.waw.company.repository.EmployeeDataRepo;
 import pl.great.waw.company.repository.EmployeeRepository;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +32,7 @@ public class EmployeeServiceImpl {
         return empToDto(employee, new ArrayList<>());
     }
 
-    public EmployeeMonthlyData createData(EmployeeDataDto employeeDataDto) throws MonthAlreadyAddedException, PeselNotFoundException, MonthNotFoundException {
+    public EmployeeMonthlyData createData(EmployeeDataDto employeeDataDto) throws MonthAlreadyAddedException, IdNotFoundException, MonthNotFoundException {
 
         this.employeeRepo.read(employeeDataDto.getEmployeeId());
 
@@ -51,15 +50,16 @@ public class EmployeeServiceImpl {
         return employeeDataRepo.createData(dtoToEmpData(employeeDataDto));
     }
 
-    public EmployeeDto read(String pesel) throws PeselNotFoundException {
+    public EmployeeDto read(String pesel) throws IdNotFoundException {
         Employee employee = employeeRepo.read(pesel);
         List<EmployeeMonthlyData> employeeMonthlyData = this.employeeDataRepo.readData(pesel);
         return empToDto(employee, employeeMonthlyData);
     }
 
-    public EmployeeDto update(String pesel, EmployeeDto employeeDto) {
+    public EmployeeDto update(String pesel, EmployeeDto employeeDto) throws IdNotFoundException {
         Employee updatedEmployee = dtoToEmp(employeeDto);
         List<EmployeeMonthlyData> employeeMonthlyDataList = this.employeeDataRepo.readData(pesel);
+        this.employeeRepo.update(updatedEmployee);
         return empToDto(updatedEmployee, employeeMonthlyDataList);
     }
 
@@ -75,17 +75,13 @@ public class EmployeeServiceImpl {
     public List<EmployeeDto> getAll() {
         return employeeRepo.getAll()
                 .stream()
-                .map(employee -> empToDto(employee, employeeDataRepo.readData(employee.getPesel())))
+                .map(employee -> empToDto(employee, employeeDataRepo.readData(employee.getId())))
                 .collect(Collectors.toList());
     }
 
-    public boolean delete(String pesel) throws PeselNotFoundException, MonthNotFoundException {
+    public boolean delete(String pesel) throws IdNotFoundException, MonthNotFoundException {
         this.employeeDataRepo.deleteData(pesel);
         return employeeRepo.delete(pesel);
-    }
-
-    public boolean isPeselAlreadyExist(String pesel) {
-        return employeeRepo.isPeselAlreadyExist(pesel);
     }
 
     public boolean isEmployeeIdAlreadyExist(String employeeId) {

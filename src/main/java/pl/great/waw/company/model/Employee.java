@@ -1,11 +1,10 @@
 package pl.great.waw.company.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Employee implements Serializable {
+public class Employee implements Entity {
 
     private String pesel;
     private String firstName;
@@ -39,7 +38,7 @@ public class Employee implements Serializable {
     }
 
 
-    public String getPesel() {
+    public String getId() {
         return pesel;
     }
 

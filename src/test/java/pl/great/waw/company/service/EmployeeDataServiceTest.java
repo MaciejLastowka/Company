@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pl.great.waw.company.exceptions.EmployeeMonthlyDataNotFound;
 import pl.great.waw.company.exceptions.MonthAlreadyAddedException;
 import pl.great.waw.company.exceptions.MonthNotFoundException;
-import pl.great.waw.company.exceptions.PeselNotFoundException;
+import pl.great.waw.company.exceptions.IdNotFoundException;
 import pl.great.waw.company.model.EmployeeMonthlyData;
 import pl.great.waw.company.repository.EmployeeDataRepo;
 import pl.great.waw.company.repository.EmployeeRepository;
@@ -57,7 +57,7 @@ public class EmployeeDataServiceTest {
     }
 
     @Test
-    void createData() throws MonthAlreadyAddedException, MonthNotFoundException, PeselNotFoundException {
+    void createData() throws MonthAlreadyAddedException, MonthNotFoundException, IdNotFoundException {
         //given
         when(employeeDataRepo.createData(any())).thenReturn(employeeMonthlyData);
         //when
@@ -68,7 +68,7 @@ public class EmployeeDataServiceTest {
     }
 
     @Test
-    void readData() throws MonthAlreadyAddedException, MonthNotFoundException, PeselNotFoundException {
+    void readData() throws MonthAlreadyAddedException, MonthNotFoundException, IdNotFoundException {
         //given
 
         when(employeeDataRepo.readData(employeeDataDto.getEmployeeId())).thenReturn(Collections.singletonList(this.employeeMonthlyData));

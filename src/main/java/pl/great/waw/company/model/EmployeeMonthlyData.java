@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class EmployeeMonthlyData implements Serializable {
+public class EmployeeMonthlyData implements Serializable, Entity {
     private final String id;
     private final String employeeId;
     private final int month;

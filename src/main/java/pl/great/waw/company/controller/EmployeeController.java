@@ -21,7 +21,7 @@ public class EmployeeController {
     }
 
     @GetMapping(value = "{pesel}")
-    public EmployeeDto get(@PathVariable String pesel) throws PeselNotFoundException {
+    public EmployeeDto get(@PathVariable String pesel) throws IdNotFoundException {
         return employeeService.read(pesel);
     }
 
@@ -32,9 +32,7 @@ public class EmployeeController {
 
     @PostMapping
     public EmployeeDto create(@RequestBody EmployeeDto employeeDto) throws PeselAlreadyExistException {
-        if (employeeService.isPeselAlreadyExist(employeeDto.getPesel())) {
-            throw new PeselAlreadyExistException("Pesel already exist: " + employeeDto.getPesel());
-        }
+
         employeeDto.setEmployeeDataDtoList(new ArrayList<>());
         employeeService.create(employeeDto);
 
@@ -42,7 +40,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/createData")
-    public EmployeeDataDto createData(@RequestBody EmployeeDataDto employeeDataDto) throws MonthNotFoundException, MonthAlreadyAddedException, PeselNotFoundException {
+    public EmployeeDataDto createData(@RequestBody EmployeeDataDto employeeDataDto) throws MonthNotFoundException, MonthAlreadyAddedException, IdNotFoundException {
 
         employeeService.createData(employeeDataDto);
 
@@ -50,7 +48,7 @@ public class EmployeeController {
     }
 
     @PutMapping(value = "{pesel}")
-    public EmployeeDto update(@PathVariable String pesel, @RequestBody EmployeeDto employeeDto) throws PeselNotFoundException {
+    public EmployeeDto update(@PathVariable String pesel, @RequestBody EmployeeDto employeeDto) throws IdNotFoundException {
         return employeeService.update(pesel, employeeDto);
     }
     @PutMapping(value = "/{employeeId}/monthly-data")
@@ -59,7 +57,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping(value = "{pesel}")
-    public boolean delete(@PathVariable String pesel) throws PeselNotFoundException, MonthNotFoundException {
+    public boolean delete(@PathVariable String pesel) throws IdNotFoundException, MonthNotFoundException {
         return employeeService.delete(pesel);
     }
 

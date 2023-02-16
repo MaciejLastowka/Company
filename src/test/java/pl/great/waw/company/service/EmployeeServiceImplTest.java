@@ -11,13 +11,13 @@ import org.mockito.junit.MockitoRule;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.great.waw.company.exceptions.MonthNotFoundException;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
-import pl.great.waw.company.exceptions.PeselNotFoundException;
+import pl.great.waw.company.exceptions.IdNotFoundException;
 import pl.great.waw.company.model.Employee;
 import pl.great.waw.company.repository.EmployeeDataRepo;
 import pl.great.waw.company.repository.EmployeeRepository;
 
 import java.math.BigDecimal;
-import static pl.great.waw.company.Mapper.MapperEmployee.empToDto;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -65,7 +65,7 @@ class EmployeeServiceImplTest {
     }
 
     @Test
-    void read() throws PeselNotFoundException {
+    void read() throws IdNotFoundException {
         //given
         EmployeeDto employeeDto = new EmployeeDto("29123123", "bartek", "porebski", BigDecimal.TEN, null);
         when(employeeRepo.read(any())).thenReturn(new Employee("29123123", "bartek", "porebski", BigDecimal.TEN));
@@ -92,7 +92,7 @@ class EmployeeServiceImplTest {
 //    }
 
     @Test
-    void delete() throws PeselNotFoundException, MonthNotFoundException {
+    void delete() throws IdNotFoundException, MonthNotFoundException {
         //given
         when(employeeRepo.delete("29123123")).thenReturn(true);
         //when

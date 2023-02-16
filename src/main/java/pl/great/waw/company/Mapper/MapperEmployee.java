@@ -16,7 +16,7 @@ public class MapperEmployee {
         EmployeeDto employeeDto = new EmployeeDto();
         employeeDto.setFirstName(employee.getFirstName());
         employeeDto.setLastName(employee.getLastName());
-        employeeDto.setPesel(employee.getPesel());
+        employeeDto.setPesel(employee.getId());
         employeeDto.setSalary(employee.getPrice());
         employeeDto.setEmployeeDataDtoList(
                 employeeMonthlyDataList.stream()

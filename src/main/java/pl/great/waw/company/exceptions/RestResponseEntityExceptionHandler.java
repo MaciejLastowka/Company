@@ -13,9 +13,9 @@ public class RestResponseEntityExceptionHandler
         extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value
-            = {PeselNotFoundException.class})
+            = {IdNotFoundException.class})
     protected ResponseEntity<Object> handleConflict(
-            PeselNotFoundException exception, WebRequest request) {
+            IdNotFoundException exception, WebRequest request) {
 
         return handleExceptionInternal(exception, "Nie mogę znaleźć pracownika o podanym peselu!",
                 new HttpHeaders(), HttpStatus.NOT_FOUND, request);
