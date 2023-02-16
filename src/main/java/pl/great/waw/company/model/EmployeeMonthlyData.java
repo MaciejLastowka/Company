@@ -2,13 +2,14 @@ package pl.great.waw.company.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class EmployeeMonthlyData {
-    private String id;
-    private String employeeId;
-    private int month;
-    private BigDecimal monthlySalary;
-    private int year;
+    private final String id;
+    private final String employeeId;
+    private final int month;
+    private final BigDecimal monthlySalary;
+    private final int year;
 
 
     public EmployeeMonthlyData(String id, String employeeId, int month, BigDecimal monthlySalary, int year) {
@@ -50,6 +51,19 @@ public class EmployeeMonthlyData {
                 ", monthlySalary = " + monthlySalary +
                 ", year = " + year +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EmployeeMonthlyData that = (EmployeeMonthlyData) o;
+        return that.id.equals(((EmployeeMonthlyData) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, employeeId, month, monthlySalary, year);
     }
 }
 
