@@ -26,9 +26,9 @@ public class FilePersistanceUtil {
         this.jsonParsing = jsonParsing;
     }
 
-    public void loadDataFromFile() throws IOException, PeselAlreadyExistException {
+    public void loadDataFromFile(String json) throws IOException, PeselAlreadyExistException {
 
-        File file = new File("employee_list.json");
+        File file = new File(json);
         if (!file.exists()) {
             return;
         }
@@ -41,7 +41,7 @@ public class FilePersistanceUtil {
         }
     }
 
-    public void saveDataToFile(String pathToFile, List<Employee> employeeList) throws IOException {
+    public void saveDataToFile(String pathToFile, List employeeList) throws IOException {
         String jsonString = jsonParsing.parseEmployee(employeeList);
 
         try (FileWriter fileWriter = new FileWriter(pathToFile)) {
@@ -50,4 +50,5 @@ public class FilePersistanceUtil {
             System.out.println(e.getStackTrace());
         }
     }
+
 }

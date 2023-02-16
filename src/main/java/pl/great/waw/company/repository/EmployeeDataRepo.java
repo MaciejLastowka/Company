@@ -3,6 +3,7 @@ package pl.great.waw.company.repository;
 import org.springframework.stereotype.Repository;
 import pl.great.waw.company.exceptions.MonthAlreadyAddedException;
 import pl.great.waw.company.exceptions.MonthNotFoundException;
+import pl.great.waw.company.model.Employee;
 import pl.great.waw.company.model.EmployeeMonthlyData;
 
 import java.util.ArrayList;
@@ -52,5 +53,9 @@ public class EmployeeDataRepo {
 
     public int sizeData() {
         return employeeMonthlyDataList.size();
+    }
+
+    public List<EmployeeMonthlyData> getAll() {
+        return new ArrayList<>(employeeMonthlyDataList);
     }
 }

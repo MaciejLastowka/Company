@@ -1,10 +1,11 @@
 package pl.great.waw.company.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class EmployeeMonthlyData {
+public class EmployeeMonthlyData implements Serializable {
     private final String id;
     private final String employeeId;
     private final int month;
