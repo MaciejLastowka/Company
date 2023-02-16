@@ -1,10 +1,7 @@
 package pl.great.waw.company.service;
 
 import org.springframework.stereotype.Service;
-import pl.great.waw.company.exceptions.MonthAlreadyAddedException;
-import pl.great.waw.company.exceptions.MonthNotFoundException;
-import pl.great.waw.company.exceptions.PeselAlreadyExistException;
-import pl.great.waw.company.exceptions.PeselNotFoundException;
+import pl.great.waw.company.exceptions.*;
 import pl.great.waw.company.model.Employee;
 import pl.great.waw.company.model.EmployeeMonthlyData;
 import pl.great.waw.company.repository.EmployeeDataRepo;
@@ -25,12 +22,10 @@ public class EmployeeServiceImpl {
 
     private final EmployeeRepository employeeRepo;
     private final EmployeeDataRepo employeeDataRepo;
-    private final EmployeeMonthlyData employeeMonthlyData;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepo, EmployeeDataRepo employeeDataRepo, EmployeeMonthlyData employeeMonthlyData) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepo, EmployeeDataRepo employeeDataRepo) {
         this.employeeRepo = employeeRepo;
         this.employeeDataRepo = employeeDataRepo;
-        this.employeeMonthlyData = employeeMonthlyData;
     }
 
     public EmployeeDto create(EmployeeDto employeeDto) throws PeselAlreadyExistException {
@@ -62,18 +57,17 @@ public class EmployeeServiceImpl {
         return empToDto(employee, employeeMonthlyData);
     }
 
-    public EmployeeDto update(String pesel, EmployeeDto employeeDto) throws PeselNotFoundException {
+    public EmployeeDto update(String pesel, EmployeeDto employeeDto) {
         Employee updatedEmployee = dtoToEmp(employeeDto);
-        Employee update = employeeRepo.read(pesel);
-        employeeRepo.update(pesel, updatedEmployee);
-        return empToDto(updatedEmployee, Collections.singletonList(employeeMonthlyData));
+        List<EmployeeMonthlyData> employeeMonthlyDataList = this.employeeDataRepo.readData(pesel);
+        return empToDto(updatedEmployee, employeeMonthlyDataList);
     }
 
-    public EmployeeMonthlyData updateData(String employeeId, EmployeeMonthlyData employeeMonthlyData) throws MonthNotFoundException {
+    public EmployeeMonthlyData updateData(String employeeId, EmployeeMonthlyData employeeMonthlyData) throws EmployeeMonthlyDataNotFound {
         List<EmployeeMonthlyData> employeeMonthlyDataList = employeeDataRepo.readData(employeeId);
         int index = employeeMonthlyDataList.indexOf(employeeMonthlyData);
-        if (index != -1) {
-            employeeMonthlyDataList.set(index, employeeMonthlyData);
+        if (index == -1) {
+            throw new EmployeeMonthlyDataNotFound();
         }
         return employeeMonthlyData;
     }
@@ -85,7 +79,8 @@ public class EmployeeServiceImpl {
                 .collect(Collectors.toList());
     }
 
-    public boolean delete(String pesel) throws PeselNotFoundException {
+    public boolean delete(String pesel) throws PeselNotFoundException, MonthNotFoundException {
+        this.employeeDataRepo.deleteData(pesel);
         return employeeRepo.delete(pesel);
     }
 

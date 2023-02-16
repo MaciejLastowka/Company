@@ -5,11 +5,11 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class EmployeeMonthlyData {
-    private String id;
-    private String employeeId;
-    private int month;
-    private BigDecimal monthlySalary;
-    private int year;
+    private final String id;
+    private final String employeeId;
+    private final int month;
+    private final BigDecimal monthlySalary;
+    private final int year;
 
 
     public EmployeeMonthlyData(String id, String employeeId, int month, BigDecimal monthlySalary, int year) {
@@ -58,7 +58,7 @@ public class EmployeeMonthlyData {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EmployeeMonthlyData that = (EmployeeMonthlyData) o;
-        return month == that.month && year == that.year && Objects.equals(id, that.id) && Objects.equals(employeeId, that.employeeId) && Objects.equals(monthlySalary, that.monthlySalary);
+        return that.id.equals(((EmployeeMonthlyData) o).id);
     }
 
     @Override

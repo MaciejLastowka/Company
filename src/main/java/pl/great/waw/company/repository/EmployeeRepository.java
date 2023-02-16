@@ -53,6 +53,7 @@ public class EmployeeRepository {
     }
 
     public boolean delete(String pesel) throws PeselNotFoundException {
+
         return list.remove(this.read(pesel));
     }
 

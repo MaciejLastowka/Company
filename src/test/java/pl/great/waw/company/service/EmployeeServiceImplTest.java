@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pl.great.waw.company.exceptions.MonthNotFoundException;
 import pl.great.waw.company.exceptions.PeselAlreadyExistException;
 import pl.great.waw.company.exceptions.PeselNotFoundException;
 import pl.great.waw.company.model.Employee;
@@ -74,7 +75,7 @@ class EmployeeServiceImplTest {
         //then
         assertEquals(read.getPesel(), employeeDto.getPesel());
     }
-//
+
 //    @Test
 //    void update() throws PeselNotFoundException {
 //        //given
@@ -91,7 +92,7 @@ class EmployeeServiceImplTest {
 //    }
 
     @Test
-    void delete() throws PeselNotFoundException {
+    void delete() throws PeselNotFoundException, MonthNotFoundException {
         //given
         when(employeeRepo.delete("29123123")).thenReturn(true);
         //when
