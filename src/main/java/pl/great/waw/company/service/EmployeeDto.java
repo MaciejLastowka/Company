@@ -1,6 +1,7 @@
 package pl.great.waw.company.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,6 +12,7 @@ public class EmployeeDto {
     private String lastName;
     private BigDecimal price;
     private List<EmployeeDataDto> employeeDataDtoList;
+    private LocalDate startDate;
 
     public EmployeeDto() {
 
@@ -55,6 +57,11 @@ public class EmployeeDto {
     public void setSalary(BigDecimal salary) {
         this.price = salary;
     }
+    public LocalDate getStartDate() {
+        return this.startDate;
+    }
+
+
 
     public BigDecimal getPrice() {
         return price;

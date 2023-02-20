@@ -1,12 +1,16 @@
 package pl.great.waw.company.controller;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import pl.great.waw.company.exceptions.*;
+import pl.great.waw.company.model.Employee;
 import pl.great.waw.company.model.EmployeeMonthlyData;
 import pl.great.waw.company.service.EmployeeDataDto;
 import pl.great.waw.company.service.EmployeeDto;
 import pl.great.waw.company.service.EmployeeServiceImpl;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +18,7 @@ import java.util.List;
 @RequestMapping("/employee")
 public class EmployeeController {
 
-    private final EmployeeServiceImpl employeeService;
+    private EmployeeServiceImpl employeeService;
 
     public EmployeeController(EmployeeServiceImpl employeeService) {
         this.employeeService = employeeService;
@@ -60,6 +64,34 @@ public class EmployeeController {
     public boolean delete(@PathVariable String pesel) throws IdNotFoundException, MonthNotFoundException {
         return employeeService.delete(pesel);
     }
+   // Dodać 3 endpointy do employee który zwróci wyplatę : miesięczną, roczną, od początku pracy
 
+//    @GetMapping(value = "/{employeeId}/salaries")
+//    public EmployeeDto getEmployeeWithSalaries(@PathVariable String employeeId,  @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate) throws IdNotFoundException {
+//        EmployeeDto employeeDto = employeeService.read(employeeId);
+//
+//        BigDecimal monthlySalary = employeeDto.getSalary();
+//        BigDecimal yearlySalary = monthlySalary.multiply(BigDecimal.valueOf(12));
+//        BigDecimal totalSalary = employeeDto.getSalary();
+//
+//        return employeeDto;
+//    }
+    @GetMapping(value = "/{employeeId}/monthly-salary")
+    public BigDecimal getMonthlySalary(@PathVariable String employeeId) throws IdNotFoundException {
+        EmployeeDto employeeDto = employeeService.read(employeeId);
+        return employeeDto.getSalary();
+    }
 
+    @GetMapping(value = "/{employeeId}/yearly-salary")
+    public BigDecimal getYearlySalary(@PathVariable String employeeId) throws IdNotFoundException {
+        EmployeeDto employeeDto = employeeService.read(employeeId);
+        BigDecimal monthlySalary = employeeDto.getSalary();
+        return monthlySalary.multiply(BigDecimal.valueOf(12));
+    }
+
+    @GetMapping(value = "/{employeeId}/total-salary")
+    public BigDecimal getTotalSalary(@PathVariable String employeeId, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate) throws IdNotFoundException {
+        EmployeeDto employeeDto = employeeService.read(employeeId);
+        return employeeDto.getSalary();
+    }
 }
