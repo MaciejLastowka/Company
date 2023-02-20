@@ -53,6 +53,9 @@ public class EmployeeDto {
     public BigDecimal getSalary() {
         return price;
     }
+    public BigDecimal getTotalSalary(EmployeeDto employeeDto, LocalDate startDate){
+        return getTotalSalary(employeeDto, startDate);
+    }
 
     public void setSalary(BigDecimal salary) {
         this.price = salary;

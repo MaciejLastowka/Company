@@ -9,7 +9,6 @@ import pl.great.waw.company.repository.EmployeeRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +23,7 @@ public class EmployeeServiceImpl {
 
     private final EmployeeRepository employeeRepo;
     private final EmployeeDataRepo employeeDataRepo;
+    private EmployeeServiceImpl employeeService;
 
     public EmployeeServiceImpl(EmployeeRepository employeeRepo, EmployeeDataRepo employeeDataRepo) {
         this.employeeRepo = employeeRepo;
@@ -91,16 +91,22 @@ public class EmployeeServiceImpl {
         return employeeDataRepo.isEmployeeIdAlreadyExist(employeeId);
     }
 
-    public BigDecimal getTotalSalary(EmployeeDto employeeDto, LocalDate startDate) {
+    public BigDecimal getTotalSalary(EmployeeDto employeeDto, LocalDate startDate) throws IdNotFoundException {
+        employeeDto = employeeService.read(employeeDto.getPesel());
         BigDecimal totalSalary = BigDecimal.ZERO;
         LocalDate currentDate = LocalDate.now();
-
-        while (startDate.isBefore(currentDate)){
+        while (startDate.isBefore(currentDate)) {
             BigDecimal monthlySalary = employeeDto.getSalary();
             totalSalary = totalSalary.add(monthlySalary);
             startDate = startDate.plusMonths(1);
         }
         return totalSalary;
+    }
+
+    public BigDecimal getYearlySalary(String employeeId) throws IdNotFoundException {
+        EmployeeDto employeeDto = employeeService.read(employeeId);
+        BigDecimal monthlySalary = employeeDto.getSalary();
+        return monthlySalary.multiply(BigDecimal.valueOf(12));
     }
 }
 
