@@ -7,6 +7,9 @@ import pl.great.waw.company.model.EmployeeMonthlyData;
 import pl.great.waw.company.repository.EmployeeDataRepo;
 import pl.great.waw.company.repository.EmployeeRepository;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -86,6 +89,18 @@ public class EmployeeServiceImpl {
 
     public boolean isEmployeeIdAlreadyExist(String employeeId) {
         return employeeDataRepo.isEmployeeIdAlreadyExist(employeeId);
+    }
+
+    public BigDecimal getTotalSalary(EmployeeDto employeeDto, LocalDate startDate) {
+        BigDecimal totalSalary = BigDecimal.ZERO;
+        LocalDate currentDate = LocalDate.now();
+
+        while (startDate.isBefore(currentDate)){
+            BigDecimal monthlySalary = employeeDto.getSalary();
+            totalSalary = totalSalary.add(monthlySalary);
+            startDate = startDate.plusMonths(1);
+        }
+        return totalSalary;
     }
 }
 
