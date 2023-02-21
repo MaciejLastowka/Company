@@ -43,11 +43,6 @@
 			<version>4.6.1</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct</artifactId>
-			<version>1.5.3.Final</version>
-		</dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -102,6 +97,15 @@
 			<artifactId>surefire-testng</artifactId>
 			<version>3.0.0-M5</version>
 		</dependency>
+		<dependency>
+			<groupId>org.xmlunit</groupId>
+			<artifactId>xmlunit-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>1.5.3.Final</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -117,7 +121,6 @@
 				</configuration>
 				<dependencies>
 					<dependency>
-
 						<groupId>org.junit.platform</groupId>
 						<artifactId>junit-platform-surefire-provider</artifactId>
 						<version>1.1.0-RC1</version>
@@ -129,16 +132,12 @@
 					</dependency>
 					<dependency>
 						<groupId>com.fasterxml.jackson.core</groupId>
-						<artifactId>jackson-databind</artifactId>
-						<version>2.9.8</version>
-					</dependency>
-					<dependency>
-						<groupId>org.junit.jupiter</groupId>
-						<artifactId>junit-jupiter-engine</artifactId>
-						<version>5.1.0-RC1</version>
+						<artifactId>jackson-core</artifactId>
+						<version>2.14.2</version>
 					</dependency>
 				</dependencies>
 			</plugin>
+
 		</plugins>
 	</build>
 
