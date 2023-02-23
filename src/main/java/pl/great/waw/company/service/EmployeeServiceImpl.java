@@ -7,6 +7,7 @@ import pl.great.waw.company.model.EmployeeMonthlyData;
 import pl.great.waw.company.repository.EmployeeDataRepo;
 import pl.great.waw.company.repository.EmployeeRepository;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,6 +55,34 @@ public class EmployeeServiceImpl {
         Employee employee = employeeRepo.read(pesel);
         List<EmployeeMonthlyData> employeeMonthlyData = this.employeeDataRepo.readData(pesel);
         return empToDto(employee, employeeMonthlyData);
+    }
+
+    public String readMonthlySalary(String pesel) throws IdNotFoundException {
+        Employee employee = employeeRepo.read(pesel);
+        return String.valueOf(employee.getPrice());
+    }
+
+    public String readYearlySalary(String pesel) throws IdNotFoundException {
+        Employee employee = employeeRepo.read(pesel);
+        int readedYearlySalary = employee.getPrice().intValue() * 12;
+        return String.valueOf(readedYearlySalary);
+    }
+
+
+    public String readTotalSalary(String pesel) throws IdNotFoundException {
+
+        List<EmployeeMonthlyData> employeeMonthlyData = this.employeeDataRepo.readData(pesel);
+        BigDecimal totalMonthlySalary = BigDecimal.ZERO;
+        for (EmployeeMonthlyData data : employeeMonthlyData) {
+            totalMonthlySalary = totalMonthlySalary.add(data.getMonthlySalary());
+        }
+        return totalMonthlySalary.toString();
+//
+//        List<EmployeeMonthlyData> employeeMonthlyData = this.employeeDataRepo.readData(pesel);
+//        BigDecimal totalSalary = employeeMonthlyData.stream()
+//                .mapToInt(EmployeeMonthlyData::getMonthlySalary)
+//                .sum();
+//        return String.valueOf(totalSalary);
     }
 
     public EmployeeDto update(String pesel, EmployeeDto employeeDto) throws IdNotFoundException {
