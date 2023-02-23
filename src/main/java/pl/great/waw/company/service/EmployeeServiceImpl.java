@@ -8,7 +8,6 @@ import pl.great.waw.company.repository.EmployeeDataRepo;
 import pl.great.waw.company.repository.EmployeeRepository;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +34,7 @@ public class EmployeeServiceImpl {
         return empToDto(employee, new ArrayList<>());
     }
 
-    public EmployeeMonthlyData createData(EmployeeDataDto employeeDataDto) throws MonthAlreadyAddedException, IdNotFoundException, MonthNotFoundException {
+    public EmployeeMonthlyData createData(EmployeeDataDto employeeDataDto) throws MonthAlreadyAddedException, IdNotFoundException {
 
         this.employeeRepo.read(employeeDataDto.getEmployeeId());
 
@@ -91,16 +90,11 @@ public class EmployeeServiceImpl {
         return employeeDataRepo.isEmployeeIdAlreadyExist(employeeId);
     }
 
-    public BigDecimal getTotalSalary(EmployeeDto employeeDto, LocalDate startDate) throws IdNotFoundException {
-        employeeDto = employeeService.read(employeeDto.getPesel());
-        BigDecimal totalSalary = BigDecimal.ZERO;
-        LocalDate currentDate = LocalDate.now();
-        while (startDate.isBefore(currentDate)) {
-            BigDecimal monthlySalary = employeeDto.getSalary();
-            totalSalary = totalSalary.add(monthlySalary);
-            startDate = startDate.plusMonths(1);
-        }
-        return totalSalary;
+    public BigDecimal getTotalSalary(EmployeeDto employeeDto)  {
+
+        return employeeDataRepo.readData(employeeDto.getPesel()).stream()
+                .map(EmployeeMonthlyData::getMonthlySalary)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public BigDecimal getYearlySalary(String employeeId) throws IdNotFoundException {
