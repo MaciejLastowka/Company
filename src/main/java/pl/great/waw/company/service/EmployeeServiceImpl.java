@@ -20,6 +20,8 @@ import static pl.great.waw.company.Mapper.MapperEmployeeData.dtoToEmpData;
 @Service
 public class EmployeeServiceImpl {
 
+    public static final  int NUMBER_OF_MONTHS  = 12;
+
     private final EmployeeRepository employeeRepo;
     private final EmployeeDataRepo employeeDataRepo;
 
@@ -33,7 +35,7 @@ public class EmployeeServiceImpl {
         return empToDto(employee, new ArrayList<>());
     }
 
-    public EmployeeMonthlyData createData(EmployeeDataDto employeeDataDto) throws MonthAlreadyAddedException, IdNotFoundException, MonthNotFoundException {
+    public EmployeeMonthlyData createData(EmployeeDataDto employeeDataDto) throws MonthAlreadyAddedException, IdNotFoundException {
 
         this.employeeRepo.read(employeeDataDto.getEmployeeId());
 
@@ -64,31 +66,22 @@ public class EmployeeServiceImpl {
 
     public String readYearlySalary(String pesel) throws IdNotFoundException {
         Employee employee = employeeRepo.read(pesel);
-        int readedYearlySalary = employee.getPrice().intValue() * 12;
+        int readedYearlySalary = employee.getPrice().intValue() * NUMBER_OF_MONTHS;
         return String.valueOf(readedYearlySalary);
     }
 
 
-    public String readTotalSalary(String pesel) throws IdNotFoundException {
-
-        List<EmployeeMonthlyData> employeeMonthlyData = this.employeeDataRepo.readData(pesel);
-        BigDecimal totalMonthlySalary = BigDecimal.ZERO;
-        for (EmployeeMonthlyData data : employeeMonthlyData) {
-            totalMonthlySalary = totalMonthlySalary.add(data.getMonthlySalary());
-        }
-        return totalMonthlySalary.toString();
-//
-//        List<EmployeeMonthlyData> employeeMonthlyData = this.employeeDataRepo.readData(pesel);
-//        BigDecimal totalSalary = employeeMonthlyData.stream()
-//                .mapToInt(EmployeeMonthlyData::getMonthlySalary)
-//                .sum();
-//        return String.valueOf(totalSalary);
+    public String readTotalSalary(String pesel) {
+        return employeeDataRepo.readData(pesel).stream()
+                .map(EmployeeMonthlyData::getMonthlySalary)
+                .reduce(BigDecimal.ZERO, BigDecimal::add).toString();
     }
 
     public EmployeeDto update(String pesel, EmployeeDto employeeDto) throws IdNotFoundException {
         Employee updatedEmployee = dtoToEmp(employeeDto);
-        List<EmployeeMonthlyData> employeeMonthlyDataList = this.employeeDataRepo.readData(pesel);
         this.employeeRepo.update(updatedEmployee);
+        List<EmployeeMonthlyData> employeeMonthlyDataList = this.employeeDataRepo.readData(pesel);
+
         return empToDto(updatedEmployee, employeeMonthlyDataList);
     }
 
@@ -113,9 +106,6 @@ public class EmployeeServiceImpl {
         return employeeRepo.delete(pesel);
     }
 
-    public boolean isEmployeeIdAlreadyExist(String employeeId) {
-        return employeeDataRepo.isEmployeeIdAlreadyExist(employeeId);
-    }
 }
 
 

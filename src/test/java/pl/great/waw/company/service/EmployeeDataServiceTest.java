@@ -17,6 +17,7 @@ import pl.great.waw.company.repository.EmployeeRepository;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,7 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class EmployeeDataServiceTest {
+class EmployeeDataServiceTest {
 
     private static final String id = "11111";
     private static final String employeeId = "123";
@@ -48,14 +49,11 @@ public class EmployeeDataServiceTest {
     public MockitoRule rule = MockitoJUnit.rule();
     private EmployeeMonthlyData employeeMonthlyData2;
 
-    @Test
     @BeforeEach
-    public void setUpData() {
+     void setUpData() {
         this.employeeDataDto = new EmployeeDataDto("11111", "123", 1, BigDecimal.TEN, 2023);
-        this.employeeMonthlyData = new EmployeeMonthlyData("11111", "123",
-                1, BigDecimal.TEN, 2023);
-        this.employeeMonthlyData2 = new EmployeeMonthlyData("11111", "123",
-                2, BigDecimal.TEN, 2023);
+        this.employeeMonthlyData = new EmployeeMonthlyData("11111", "123", 1, BigDecimal.TEN, 2023);
+        this.employeeMonthlyData2 = new EmployeeMonthlyData("11111", "123", 2, BigDecimal.TEN, 2023);
     }
 
     @Test
@@ -110,19 +108,15 @@ public class EmployeeDataServiceTest {
         assertEquals("120", result);
     }
 
-
-
-    @Test   //nie dziala!
-    void readTotalSalary() throws IdNotFoundException, MonthAlreadyAddedException {
+    @Test
+    void readTotalSalary() {
         //given
-        employeeDataRepo.createData(employeeMonthlyData);
-        employeeDataRepo.createData(employeeMonthlyData2);
-        Employee employee = new Employee("123", "bartek", "porebski", BigDecimal.TEN);
-        when(employeeDataRepo.readData(employeeDataDto.getEmployeeId())).thenReturn(Collections.singletonList(this.employeeMonthlyData));
+        when(employeeDataRepo.readData(employeeDataDto.getEmployeeId()))
+                .thenReturn(Arrays.asList(this.employeeMonthlyData,employeeMonthlyData2));
         //when
         String provided = employeeServiceImpl.readTotalSalary("123");
         //then
-        assertEquals("10", provided); //powinno zwracac 20 ale dalem 10 zeby chwilowo przechodzilo
+        assertEquals("20", provided);
     }
 
 }
