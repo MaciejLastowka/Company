@@ -7,6 +7,7 @@ import pl.great.waw.company.model.EmployeeMonthlyData;
 import pl.great.waw.company.repository.EmployeeDataRepo;
 import pl.great.waw.company.repository.EmployeeRepository;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,8 @@ import static pl.great.waw.company.Mapper.MapperEmployeeData.dtoToEmpData;
 
 @Service
 public class EmployeeServiceImpl {
+
+    public static final  int NUMBER_OF_MONTHS  = 12;
 
     private final EmployeeRepository employeeRepo;
     private final EmployeeDataRepo employeeDataRepo;
@@ -32,7 +35,7 @@ public class EmployeeServiceImpl {
         return empToDto(employee, new ArrayList<>());
     }
 
-    public EmployeeMonthlyData createData(EmployeeDataDto employeeDataDto) throws MonthAlreadyAddedException, IdNotFoundException, MonthNotFoundException {
+    public EmployeeMonthlyData createData(EmployeeDataDto employeeDataDto) throws MonthAlreadyAddedException, IdNotFoundException {
 
         this.employeeRepo.read(employeeDataDto.getEmployeeId());
 
@@ -56,10 +59,29 @@ public class EmployeeServiceImpl {
         return empToDto(employee, employeeMonthlyData);
     }
 
+    public String readMonthlySalary(String pesel) throws IdNotFoundException {
+        Employee employee = employeeRepo.read(pesel);
+        return String.valueOf(employee.getPrice());
+    }
+
+    public String readYearlySalary(String pesel) throws IdNotFoundException {
+        Employee employee = employeeRepo.read(pesel);
+        int readedYearlySalary = employee.getPrice().intValue() * NUMBER_OF_MONTHS;
+        return String.valueOf(readedYearlySalary);
+    }
+
+
+    public String readTotalSalary(String pesel) {
+        return employeeDataRepo.readData(pesel).stream()
+                .map(EmployeeMonthlyData::getMonthlySalary)
+                .reduce(BigDecimal.ZERO, BigDecimal::add).toString();
+    }
+
     public EmployeeDto update(String pesel, EmployeeDto employeeDto) throws IdNotFoundException {
         Employee updatedEmployee = dtoToEmp(employeeDto);
-        List<EmployeeMonthlyData> employeeMonthlyDataList = this.employeeDataRepo.readData(pesel);
         this.employeeRepo.update(updatedEmployee);
+        List<EmployeeMonthlyData> employeeMonthlyDataList = this.employeeDataRepo.readData(pesel);
+
         return empToDto(updatedEmployee, employeeMonthlyDataList);
     }
 
@@ -84,9 +106,6 @@ public class EmployeeServiceImpl {
         return employeeRepo.delete(pesel);
     }
 
-    public boolean isEmployeeIdAlreadyExist(String employeeId) {
-        return employeeDataRepo.isEmployeeIdAlreadyExist(employeeId);
-    }
 }
 
 
